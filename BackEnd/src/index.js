@@ -39,7 +39,13 @@ app.use(
   cors({
     origin(origin, callback) {
       // Requests without an Origin header are server-to-server or command-line calls.
-      if (!origin || allowedOrigins.has(origin.replace(/\/$/, ""))) {
+      if (!origin) return callback(null, true);
+      const cleanOrigin = origin.replace(/\/$/, "");
+      if (
+        allowedOrigins.has(cleanOrigin) ||
+        cleanOrigin.endsWith(".vercel.app") ||
+        cleanOrigin.endsWith(".onrender.com")
+      ) {
         return callback(null, true);
       }
       return callback(null, false);

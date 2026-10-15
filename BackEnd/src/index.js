@@ -107,10 +107,17 @@ async function startServer() {
     console.warn(`⚠️ Optional services unconfigured: ${missingOptional.join(", ")} (fallback modes active)`);
   }
 
-  await connectDB();
-  return app.listen(port, "0.0.0.0", () => {
+  const server = app.listen(port, "0.0.0.0", () => {
     console.log(`EventHub API is listening on port ${port}`);
   });
+
+  try {
+    await connectDB();
+  } catch (error) {
+    console.error("Database connection pending IP whitelist:", error.message);
+  }
+
+  return server;
 }
 
 startServer().catch((error) => {

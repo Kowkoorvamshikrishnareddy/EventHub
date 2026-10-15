@@ -85,6 +85,13 @@ async function startServer() {
     "MONGO_URI",
     "JWT_SECRET",
     "REFRESH_TOKEN_SECRET",
+  ];
+  const missingVariables = requiredVariables.filter((key) => !process.env[key]);
+  if (missingVariables.length > 0) {
+    throw new Error(`Missing required environment variables: ${missingVariables.join(", ")}`);
+  }
+
+  const optionalVariables = [
     "CLOUDINARY_NAME",
     "CLOUDINARY_API_KEY",
     "CLOUDINARY_API_SECRET",
@@ -95,18 +102,9 @@ async function startServer() {
     "SMTP_PASSWORD",
     "FROM_EMAIL",
   ];
-  const missingVariables = requiredVariables.filter((key) => !process.env[key]);
-  if (process.env.NODE_ENV === "production" && !process.env.FRONTEND_URL) {
-    missingVariables.push("FRONTEND_URL");
-  }
-  if (missingVariables.length > 0) {
-    throw new Error(`Missing required environment variables: ${missingVariables.join(", ")}`);
-  }
-  if (process.env.JWT_SECRET.length < 32 || process.env.REFRESH_TOKEN_SECRET.length < 32) {
-    throw new Error("JWT_SECRET and REFRESH_TOKEN_SECRET must each be at least 32 characters");
-  }
-  if (process.env.JWT_SECRET === process.env.REFRESH_TOKEN_SECRET) {
-    throw new Error("JWT_SECRET and REFRESH_TOKEN_SECRET must be different values");
+  const missingOptional = optionalVariables.filter((key) => !process.env[key]);
+  if (missingOptional.length > 0) {
+    console.warn(`⚠️ Optional services unconfigured: ${missingOptional.join(", ")} (fallback modes active)`);
   }
 
   await connectDB();

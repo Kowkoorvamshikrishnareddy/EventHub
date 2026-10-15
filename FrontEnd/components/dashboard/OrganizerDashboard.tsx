@@ -38,7 +38,7 @@ export default function OrganizerDashboard() {
       if (!user) return
 
       try {
-        const data = await fetchOrganizerStats(user.id)
+        const data = await fetchOrganizerStats(user.id ?? user._id ?? "")
         setStats(data)
       } catch (error) {
         console.error("Error fetching stats:", error)

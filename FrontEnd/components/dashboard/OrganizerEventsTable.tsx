@@ -36,7 +36,7 @@ export default function OrganizerEventsTable() {
       if (!user) return
 
       try {
-        const data = await fetchOrganizerEvents(user.id)
+        const data = await fetchOrganizerEvents(user.id ?? user._id ?? "")
         setEvents(data)
       } catch (error) {
         console.error("Error fetching events:", error)

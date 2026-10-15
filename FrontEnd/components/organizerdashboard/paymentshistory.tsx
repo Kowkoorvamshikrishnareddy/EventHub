@@ -55,7 +55,7 @@ export default function PaymentHistory({paymentshistry}:any) {
     return matchesSearch && matchesStatus && matchesMonth
   })
 
-  const totalAmount = filteredPayments.reduce((sum, payment) => sum + payment.amount, 0)
+  const totalAmount = filteredPayments.reduce((sum: number, payment: any) => sum + Number(payment.amount ?? 0), 0)
   const totalPages = Math.ceil(filteredPayments.length / itemsPerPage)
   const startIndex = (currentPage - 1) * itemsPerPage
   const endIndex = startIndex + itemsPerPage
@@ -138,7 +138,7 @@ export default function PaymentHistory({paymentshistry}:any) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-green-100 text-sm font-medium">Successful Payments</p>
-                <p className="text-3xl font-bold">{filteredPayments.filter((p) => p.status === "paid").length}</p>
+                <p className="text-3xl font-bold">{filteredPayments.filter((p: any) => p.status === "paid").length}</p>
               </div>
               <div className="bg-white/20 p-3 rounded-full">
                 <CheckCircle className="h-6 w-6" />

@@ -20,6 +20,7 @@ interface EventDetailsModalProps {
   isOpen: boolean
   onClose: () => void
   event: any
+  onEventUpdate?: () => void
 }
 
 export function EventDetailsModal({ isOpen, onClose, event }: EventDetailsModalProps) {
@@ -147,9 +148,9 @@ export function EventDetailsModal({ isOpen, onClose, event }: EventDetailsModalP
               <h3 className="text-lg font-semibold text-gray-900">Attendees ({event.attendee.length})</h3>
               <div className="flex space-x-2 text-sm">
                 
-                {event.attendee.filter((a) => a.status === "no-show").length > 0 && (
+                {event.attendee.filter((a: any) => a.status === "no-show").length > 0 && (
                   <span className="text-red-600">
-                    ✗ {event.attendee.filter((a) => a.status === "no-show").length} No Show
+                    ✗ {event.attendee.filter((a: any) => a.status === "no-show").length} No Show
                   </span>
                 )}
               </div>

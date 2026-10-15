@@ -13,7 +13,7 @@ import { useToast } from "../ui/use-toast"
 
 type Step = "email" | "loading" | "reset"
 
-export default function ForgetPasswordModal({ openforgetPasswordModal, HandleCloseForgetPasswordModel }: { openforgetPasswordModal: boolean, HandleCloseForgetPasswordModel: () => boolean }) {
+export default function ForgetPasswordModal({ openforgetPasswordModal, HandleCloseForgetPasswordModel }: { openforgetPasswordModal: boolean, HandleCloseForgetPasswordModel: () => void }) {
   const [step, setStep] = useState<Step>("email")
   const [email, setEmail] = useState("")
   const [newpassword, setNewPassword] = useState("")
@@ -47,7 +47,7 @@ export default function ForgetPasswordModal({ openforgetPasswordModal, HandleClo
 
   const handlePasswordReset = (e: React.FormEvent) => {
     e.preventDefault()
-    if (newPassword && confirmPassword && newPassword === confirmPassword) {
+    if (newpassword && confirmPassword && newpassword === confirmPassword) {
       // Handle password reset logic here
       console.log("Password reset successful")
       setIsOpen(false)
@@ -75,7 +75,7 @@ export default function ForgetPasswordModal({ openforgetPasswordModal, HandleClo
         setStep("reset")
         setProgress(100)
       }
-    } catch (error) {
+    } catch (error: any) {
       setProgress(0)
       toast({
         title: "Error",
@@ -103,7 +103,7 @@ export default function ForgetPasswordModal({ openforgetPasswordModal, HandleClo
             setConfirmPassword("")
             setProgress(0)
          }
-      } catch (error) {
+      } catch (error: any) {
          toast({
             title: "Error",
             description: error?.response?.data?.message || "Failed to send your message. Please try again.",
@@ -260,3 +260,4 @@ export default function ForgetPasswordModal({ openforgetPasswordModal, HandleClo
     </div>
   )
 }
+

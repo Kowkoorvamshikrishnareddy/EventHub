@@ -47,6 +47,7 @@ import { EditUsers } from "@/components/ApiServices/ApiServices"
 import CommonLoader from "@/components/commonloader/CommonLoader"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { set } from "date-fns"
+import axios from "axios"
 
 // Type definitions
 interface Event {
@@ -92,6 +93,7 @@ interface EditUserData {
   address: string
   currentPassword: string
   newPassword: string
+  image?: string
   confirmPassword?: string
 }
 
@@ -123,7 +125,7 @@ export default function OrganizerDashboard() {
   })
   const [imagePreview, setImagePreview] = useState<string | null>(null)
 
-  const [avatarImage, setAvatarImage] = useState(null)
+  const [avatarImage, setAvatarImage] = useState<File | null>(null)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setEditUser({
@@ -136,7 +138,7 @@ export default function OrganizerDashboard() {
     try {
       setLoader(true)
       const fd = new FormData();
-      fd.append("file", avatarImage);
+      if (avatarImage) fd.append("file", avatarImage)
       Object.entries(editUser).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
           fd.append(key, value as string);
@@ -154,11 +156,12 @@ export default function OrganizerDashboard() {
         setLoader(false)
         setIsSheetOpen(false)
       }
-    } catch (error) {
+    } catch (error: unknown) {
       setLoader(false)
+      const message = axios.isAxiosError(error) ? error.response?.data?.message : undefined
       toast({
         title: "Error",
-        description: error?.response?.data?.message || "Failed to update profile. Please try again.",
+        description: message || "Failed to update profile. Please try again.",
         variant: "destructive",
       })
     }
@@ -171,14 +174,14 @@ export default function OrganizerDashboard() {
       setEditUser({
         name: auth.name,
         email: auth.email,
-        phone: auth.phone,
-        address: auth.address,
+        phone: auth.phone ?? "",
+        address: auth.address ?? "",
         currentPassword: "",
         newPassword: "",
         confirmPassword: "",
       })
     }
-    setImagePreview(auth?.image)
+    setImagePreview(auth?.image ?? null)
   }, [auth])
 
 
@@ -201,7 +204,7 @@ export default function OrganizerDashboard() {
 
   useEffect(() => {
     if (auth && auth._id) {
-      getAssignEvents(auth.createdBy, auth._id)
+      getAssignEvents(typeof auth.createdBy === "string" ? auth.createdBy : auth.createdBy?._id ?? "", auth._id)
     }
   }, [auth])
 
@@ -247,7 +250,7 @@ export default function OrganizerDashboard() {
         text: "Upcoming",
       },
     }
-    const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.upcoming
+    const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.Upcoming
     return <Badge className={`${config.className} border font-medium`}>{config.text}</Badge>
   }
 
@@ -444,7 +447,7 @@ export default function OrganizerDashboard() {
                         <div className="flex items-center space-x-3">
                           <Calendar className="w-4 h-4 text-gray-400" />
                           <span className="text-sm text-gray-900">
-                            Since {new Date(auth?.createdAt).toLocaleDateString()}
+                             Since {new Date(auth?.createdAt ?? Date.now()).toLocaleDateString()}
                           </span>
                         </div>
                       </div>
@@ -481,7 +484,7 @@ export default function OrganizerDashboard() {
                   </div>
                 </div>
                 <Badge variant="outline" className="text-base bg-indigo-50 text-indigo-700 border-indigo-200 px-4 py-2">
-                  📊 {selectEvent[0]?.eventIds?.length || auth?.assignedEvents.length} Events
+                  📊 {selectEvent[0]?.eventIds?.length || auth?.assignedEvents?.length || 0} Events
                 </Badge>
               </div>
 
@@ -859,7 +862,7 @@ export default function OrganizerDashboard() {
             onEventUpdate={() => {
               // Refresh events after update
               if (auth && auth.createdBy && auth._id) {
-                getAssignEvents(auth.createdBy, auth._id)
+                 getAssignEvents(typeof auth.createdBy === "string" ? auth.createdBy : auth.createdBy._id ?? "", auth._id)
               }
             }}
           />

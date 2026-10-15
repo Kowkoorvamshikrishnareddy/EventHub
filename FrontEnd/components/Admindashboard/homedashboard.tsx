@@ -22,14 +22,14 @@ import CommonLoader from "../commonloader/CommonLoader"
 
 function AdminDashboardHome() {
   // Your original state variables
-  const [totalrevenue, setTotalRevenue] = useState({})
-  const [users, setUsers] = useState({})
-  const [allevents, setAllEvents] = useState({})
-  const [bestperformenceevent, setBestPerformenceEvent] = useState({})
+  const [totalrevenue, setTotalRevenue] = useState<any>({})
+  const [users, setUsers] = useState<any>({})
+  const [allevents, setAllEvents] = useState<any>({})
+  const [bestperformenceevent, setBestPerformenceEvent] = useState<any>({})
   const [loading, setLoading] = useState(true)
-  const [monthlyRevenue, setMonthlyRevenue] = useState({})
-  const [getEnquiryData, setGetEnquiryData] = useState([])
-  const [totalcommision, setTotalCommition] = useState({})
+  const [monthlyRevenue, setMonthlyRevenue] = useState<any>({})
+  const [getEnquiryData, setGetEnquiryData] = useState<any[]>([])
+  const [totalcommision, setTotalCommition] = useState<any>({})
 
 
 
@@ -37,7 +37,7 @@ function AdminDashboardHome() {
   useEffect(() => {
     const handlegetpayment = async () => {
       try {
-        const response = await getRevenue(auth?._id)
+        const response = await getRevenue(auth?._id ?? "")
         if (response?.statuscode == 200) {
           setTotalRevenue(response?.data)
         }
@@ -48,7 +48,7 @@ function AdminDashboardHome() {
 
     const getDashboardearnings = async () => {
       try {
-        const response = await getAdmincommitionfromorganizer(auth?._id)
+        const response = await getAdmincommitionfromorganizer(auth?._id ?? "")
         console.log("response", response)
         if (response) {
           setTotalCommition(response)
@@ -60,7 +60,7 @@ function AdminDashboardHome() {
 
     const getUsers = async () => {
       try {
-        const response = await getAllOrganizerAndAttendee(auth?._id)
+        const response = await getAllOrganizerAndAttendee(auth?._id ?? "")
         if (response?.statuscode == 200) {
           setUsers(response?.data)
         }
@@ -71,7 +71,7 @@ function AdminDashboardHome() {
 
     const getAllEvents = async () => {
       try {
-        const response = await getEvents(auth?._id)
+        const response = await getEvents(auth?._id ?? "")
         if (response?.statuscode == 201) {
           setAllEvents(response?.data)
         }
@@ -82,7 +82,7 @@ function AdminDashboardHome() {
 
     const getBestPerformenceEvent = async () => {
       try {
-        const response = await getTopPayments(auth?._id)
+        const response = await getTopPayments(auth?._id ?? "")
         if (response?.statuscode == 200) {
           setBestPerformenceEvent(response?.data)
         }
@@ -93,7 +93,7 @@ function AdminDashboardHome() {
 
     const getMonthlyRevenues = async () => {
       try {
-        const response = await getMonthlyRevenue(auth?._id)
+        const response = await getMonthlyRevenue(auth?._id ?? "")
         console.log("month", response)
         if (response?.statuscode == 200) {
           setMonthlyRevenue(response?.data)
@@ -105,7 +105,7 @@ function AdminDashboardHome() {
 
 
 
-    if (auth?._id) {
+    if (auth?._id ?? "") {
       setLoading(true)
       Promise.all([
         getBestPerformenceEvent(),
@@ -135,7 +135,7 @@ function AdminDashboardHome() {
     return (
       name
         ?.split(" ")
-        .map((n) => n[0])
+        .map((n: string) => n[0])
         .join("")
         .toUpperCase() || "U"
     )
@@ -264,7 +264,7 @@ function AdminDashboardHome() {
                   <div>
                     <h4 className="font-medium text-gray-900 mb-3">Participants</h4>
                     <div className="space-y-2 max-h-32 overflow-y-auto">
-                      {bestperformenceevent.usernames?.map((username, index) => (
+                      {bestperformenceevent.usernames?.map((username: string, index: number) => (
                         <div key={index} className="flex items-center space-x-3">
                           <Avatar className="h-8 w-8 ring-2 ring-gray-200">
                             <AvatarFallback className="text-xs bg-yellow-100 text-yellow-600 backdrop-blur-sm">
@@ -291,4 +291,6 @@ function AdminDashboardHome() {
 }
 
 export default AdminDashboardHome
+
+
 

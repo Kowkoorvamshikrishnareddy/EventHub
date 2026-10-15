@@ -17,11 +17,11 @@ import {getAllCategory,createCategory,updateCategory,deleteCategory} from "../Ap
      }
    )
 
-   export const getAllCategoryThunk = createAsyncThunk(
+   export const getAllCategoryThunk = createAsyncThunk<any, string | undefined>(
      'category/getAllCategoryThunk',
      async (id, { rejectWithValue }) => {
        try {
-         const response = await getAllCategory(id);
+         const response = await getAllCategory(id ?? "");
          return response 
        } catch (error: any) {
          // ✅ Proper error structure for known error formats
@@ -63,8 +63,8 @@ import {getAllCategory,createCategory,updateCategory,deleteCategory} from "../Ap
    )
 
 const InitialsState = {
-      category:[],
-      allcategory:[],
+      category: [] as any,
+      allcategory: [] as any[],
       loading:false,
       error:"",
       categoryFormData:{
@@ -95,7 +95,7 @@ const UserSlice = createSlice({
         }),
         builder.addCase(createCategoryThunk.rejected,(state,action)=>{
             state.loading = false
-            state.error = action.error.message
+            state.error = action.error.message ?? "Request failed"
         })
 
 
@@ -110,7 +110,7 @@ const UserSlice = createSlice({
         }),
         builder.addCase(updateCategoryThunk.rejected,(state,action)=>{
             state.loading = false
-            state.error = action.error.message
+            state.error = action.error.message ?? "Request failed"
         })
 
 
@@ -125,7 +125,7 @@ const UserSlice = createSlice({
         }),
         builder.addCase(deleteCategoryThunk.rejected,(state,action)=>{
             state.loading = false
-            state.error = action.error.message
+            state.error = action.error.message ?? "Request failed"
         })
         
         // =================getAllCategory========================
@@ -139,7 +139,7 @@ const UserSlice = createSlice({
         }),
         builder.addCase(getAllCategoryThunk.rejected,(state,action)=>{
             state.loading = false
-            state.error = action.error.message
+            state.error = action.error.message ?? "Request failed"
         })
     }
 })
@@ -147,3 +147,4 @@ const UserSlice = createSlice({
 
 export const {setCategoryFormData,resetCategoryFormData} = UserSlice.actions
 export default UserSlice.reducer
+

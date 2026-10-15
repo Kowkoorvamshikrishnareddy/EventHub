@@ -3,6 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
+import type { Event } from "@/lib/types"
  
 export default function CategorySection({evetsdata, isLoading}:{evetsdata:Event[],isLoading:boolean}) {
  
@@ -60,13 +61,13 @@ export default function CategorySection({evetsdata, isLoading}:{evetsdata:Event[
                   <div className="relative h-40 rounded-lg overflow-hidden group">
                     <Image
                       src={category?.image || "/placeholder.svg"}
-                      alt={category?.Category?.Category_name|| "Event Category Image"} 
+                      alt={(typeof category?.Category === "object" ? category.Category?.Category_name : category?.Category_name) || "Event Category Image"} 
                       fill
                       className="object-cover transition-transform duration-300 group-hover:scale-110"
                       sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 20vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
-                      <h3 className="text-white font-semibold text-lg">{category?.Category?.Category_name}</h3>
+                      <h3 className="text-white font-semibold text-lg">{typeof category?.Category === "object" ? category.Category?.Category_name : category?.Category_name}</h3>
                     </div>
                   </div>
                 </Link>

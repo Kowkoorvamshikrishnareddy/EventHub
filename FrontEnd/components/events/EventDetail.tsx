@@ -16,16 +16,18 @@ import { Loader2 } from "lucide-react"
 import { useToast } from "@/components/ui/use-toast"
 import { useRouter } from "next/navigation"
 import PaymentModel from "../paymentsModel/paymentmodel"
+import axios from "axios"
 
 export default function EventDetail() {
   const [eventdata, setEventData] = useState<any>({})
   const params = useParams()
-  const id = params.id
+  const idParam = params.id
+  const id = Array.isArray(idParam) ? idParam[0] : idParam
   const [isLoading, setIsLoading] = useState(true)
   const { toast } = useToast()
   const router = useRouter()
   const { auth, refreshUser } = useAuth()
-  const [paymentData, setPaymentData] = useState({})
+  const [paymentData, setPaymentData] = useState<any>({})
 
   
   useEffect(() => {
@@ -79,10 +81,11 @@ export default function EventDetail() {
         })
       }
       return response?.data
-    } catch (error) {
+    } catch (error: unknown) {
+      const message = axios.isAxiosError(error) ? error.response?.data?.message : undefined
       toast({
         title: "Error",
-        description: error?.response?.data?.message || "Something went wrong",
+        description: message || "Something went wrong",
         variant: "destructive",
       })
     }
@@ -111,13 +114,13 @@ export default function EventDetail() {
   }
 
   const isRegisteredDisable = () => {
-    if (auth?.role == "organizer" || auth?.role == "admin" || auth?.role == "super Admin") return true
+    if (auth?.role == "organizer" || auth?.role == "admin" || (auth?.role as string) == "super Admin") return true
     const isRegistered = auth?.registered_attendees?.some((event: any) => event._id === eventdata?._id)
     return isRegistered
   }
 
   const getButtonText = () => {
-    if (auth?.role == "organizer" || auth?.role == "admin" || auth?.role == "super Admin") {
+    if (auth?.role == "organizer" || auth?.role == "admin" || (auth?.role as string) == "super Admin") {
       return auth?.role == "admin" ? "Admin Can not Apply any events" : "Organizer Can not Apply any events"
     }
     const isRegistered = auth?.registered_attendees?.some((event: any) => event._id === eventdata?._id)
@@ -252,4 +255,5 @@ export default function EventDetail() {
     </>
   )
 }
+
 

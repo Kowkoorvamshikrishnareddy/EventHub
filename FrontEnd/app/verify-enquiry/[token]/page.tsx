@@ -14,7 +14,7 @@ export default function VerifyEnquiryPage() {
   const handleVerify = async () => {
     setLoading(true)
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1"
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:6000/api/v1"
       const res = await axios.get(`${apiUrl}/enquiry/verify/${params?.token}`)
 
       if (res?.data) {

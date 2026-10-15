@@ -1,0 +1,146 @@
+app/organizerdashboard/page.tsx(204,23): error TS2345: Argument of type 'string | User' is not assignable to parameter of type 'string'.
+  Type 'User' is not assignable to type 'string'.
+app/organizerdashboard/page.tsx(250,86): error TS2551: Property 'upcoming' does not exist on type '{ Completed: { className: string; text: string; }; Delayed: { className: string; text: string; }; Cancelled: { className: string; text: string; }; Upcoming: { className: string; text: string; }; }'. Did you mean 'Upcoming'?
+app/organizerdashboard/page.tsx(315,7): error TS2353: Object literal may only specify known properties, and 'image' does not exist in type 'SetStateAction<EditUserData>'.
+app/organizerdashboard/page.tsx(847,13): error TS2322: Type '(organizationId: string, userId: string) => Promise<any>' is not assignable to type '() => Promise<any>'.
+  Target signature provides too few arguments. Expected 2 or more, but got 0.
+app/organizerdashboard/page.tsx(859,13): error TS2322: Type '{ isOpen: boolean; onClose: () => void; event: Event; onEventUpdate: () => void; }' is not assignable to type 'IntrinsicAttributes & EventDetailsModalProps'.
+  Property 'onEventUpdate' does not exist on type 'IntrinsicAttributes & EventDetailsModalProps'.
+app/organizerdashboard/page.tsx(862,33): error TS2345: Argument of type 'string | User' is not assignable to parameter of type 'string'.
+  Type 'User' is not assignable to type 'string'.
+components/Admindashboard/categoryes.tsx(75,18): error TS2554: Expected 1-2 arguments, but got 0.
+components/Admindashboard/categoryes.tsx(99,9): error TS2322: Type 'Dispatch<SetStateAction<boolean>>' is not assignable to type '() => SetStateAction<boolean>'.
+  Target signature provides too few arguments. Expected 1 or more, but got 0.
+components/Admindashboard/categoryes.tsx(101,9): error TS2322: Type 'Dispatch<SetStateAction<string>>' is not assignable to type '() => SetStateAction<string>'.
+  Target signature provides too few arguments. Expected 1 or more, but got 0.
+components/Admindashboard/categoryes.tsx(105,9): error TS2322: Type 'Dispatch<SetStateAction<string>>' is not assignable to type '() => SetStateAction<string>'.
+  Target signature provides too few arguments. Expected 1 or more, but got 0.
+components/Admindashboard/categoryes.tsx(106,9): error TS2322: Type 'Dispatch<SetStateAction<string>>' is not assignable to type '() => SetStateAction<string>'.
+  Target signature provides too few arguments. Expected 1 or more, but got 0.
+components/Admindashboard/eventmanagement.tsx(108,18): error TS2554: Expected 1-2 arguments, but got 0.
+components/Admindashboard/eventmanagement.tsx(118,16): error TS2554: Expected 1-2 arguments, but got 0.
+components/Admindashboard/eventmanagement.tsx(166,22): error TS2872: This kind of expression is always truthy.
+components/Admindashboard/eventmanagement.tsx(442,36): error TS2345: Argument of type '(p: any) => number' is not assignable to parameter of type 'number'.
+components/Admindashboard/eventmanagement.tsx(505,36): error TS2345: Argument of type '(p: any) => number' is not assignable to parameter of type 'number'.
+components/Admindashboard/UserManagement.tsx(1925,14): error TS2339: Property 'image' does not exist on type 'Person'.
+components/Admindashboard/UserManagement.tsx(1926,29): error TS2339: Property 'image' does not exist on type 'Person'.
+components/Admindashboard/UserManagement.tsx(2529,38): error TS2339: Property 'image' does not exist on type 'Person'.
+components/auth/LoginForm.tsx(56,19): error TS2345: Argument of type 'string' is not assignable to parameter of type '"email" | "password"'.
+components/auth/LoginForm.tsx(216,62): error TS2322: Type '() => void' is not assignable to type '() => boolean'.
+  Type 'void' is not assignable to type 'boolean'.
+components/auth/LoginForm.tsx(220,11): error TS2322: Type '() => void' is not assignable to type '() => boolean'.
+  Type 'void' is not assignable to type 'boolean'.
+components/auth/RegisterForm.tsx(72,19): error TS2345: Argument of type 'string' is not assignable to parameter of type '"name" | "role" | "email" | "password"'.
+components/CategroyDialogModel/model.tsx(56,49): error TS2554: Expected 0 arguments, but got 1.
+components/CategroyDialogModel/model.tsx(56,83): error TS2554: Expected 0 arguments, but got 1.
+components/dashboard/AdminDashboard.tsx(66,14): error TS2554: Expected 1-2 arguments, but got 0.
+components/dashboard/AttendeeBookingsTable.tsx(94,11): error TS2367: This comparison appears to be unintentional because the types 'Event[]' and 'number' have no overlap.
+components/dashboard/AttendeeBookingsTable.tsx(115,48): error TS2345: Argument of type '(booking: string) => JSX.Element' is not assignable to parameter of type '(value: Event, index: number, array: Event[]) => Element'.
+  Types of parameters 'booking' and 'value' are incompatible.
+    Type 'Event' is not assignable to type 'string'.
+components/dashboard/AttendeeBookingsTable.tsx(116,41): error TS2339: Property '_id' does not exist on type 'string'.
+components/dashboard/AttendeeBookingsTable.tsx(117,64): error TS2339: Property 'Event_title' does not exist on type 'string'.
+components/dashboard/AttendeeBookingsTable.tsx(121,49): error TS2339: Property 'Date' does not exist on type 'string'.
+components/dashboard/AttendeeBookingsTable.tsx(127,33): error TS2339: Property 'location' does not exist on type 'string'.
+components/dashboard/AttendeeBookingsTable.tsx(130,55): error TS2339: Property 'date' does not exist on type 'string'.
+components/dashboard/AttendeeBookingsTable.tsx(134,57): error TS2339: Property '_id' does not exist on type 'string'.
+components/dashboard/AttendeeBookingsTable.tsx(139,42): error TS2339: Property 'Date' does not exist on type 'string'.
+components/dashboard/AttendeeBookingsTable.tsx(144,65): error TS2339: Property '_id' does not exist on type 'string'.
+components/dashboard/CategoriesTable.tsx(80,18): error TS2554: Expected 1-2 arguments, but got 0.
+components/dashboard/CategoriesTable.tsx(118,16): error TS2554: Expected 1-2 arguments, but got 0.
+components/dashboard/CategoriesTable.tsx(126,9): error TS2322: Type 'Dispatch<SetStateAction<boolean>>' is not assignable to type '() => SetStateAction<boolean>'.
+  Target signature provides too few arguments. Expected 1 or more, but got 0.
+components/dashboard/CategoriesTable.tsx(128,9): error TS2322: Type 'Dispatch<SetStateAction<string>>' is not assignable to type '() => SetStateAction<string>'.
+  Target signature provides too few arguments. Expected 1 or more, but got 0.
+components/dashboard/CategoriesTable.tsx(132,9): error TS2322: Type 'Dispatch<SetStateAction<string>>' is not assignable to type '() => SetStateAction<string>'.
+  Target signature provides too few arguments. Expected 1 or more, but got 0.
+components/dashboard/EventsTable.tsx(47,14): error TS2554: Expected 1-2 arguments, but got 0.
+components/dashboard/EventsTable.tsx(77,13): error TS2554: Expected 2 arguments, but got 1.
+components/dashboard/EventsTable.tsx(83,16): error TS2554: Expected 1-2 arguments, but got 0.
+components/dashboard/OrganizerDashboard.tsx(27,11): error TS2339: Property 'user' does not exist on type 'AuthContextType'.
+components/dashboard/OrganizerEventsTable.tsx(27,11): error TS2339: Property 'user' does not exist on type 'AuthContextType'.
+components/events/CategoryEvents.tsx(90,16): error TS2740: Type '{ key: string; event: Event; onToggleFavorite: () => void; isFavorite: any; }' is missing the following properties from type 'EventCardProps': Event_title, Description, Date, Time, and 8 more.
+components/events/EventCard.tsx(80,32): error TS2339: Property 'Category_name' does not exist on type 'string | Category'.
+  Property 'Category_name' does not exist on type 'string'.
+components/events/EventCard.tsx(81,30): error TS2339: Property 'Category_name' does not exist on type 'string | Category'.
+  Property 'Category_name' does not exist on type 'string'.
+components/events/EventCard.tsx(82,30): error TS2339: Property 'Category_name' does not exist on type 'string | Category'.
+  Property 'Category_name' does not exist on type 'string'.
+components/events/EventCard.tsx(107,31): error TS2345: Argument of type 'string | Date' is not assignable to parameter of type 'string'.
+  Type 'Date' is not assignable to type 'string'.
+components/events/EventCard.tsx(124,63): error TS2339: Property 'name' does not exist on type 'string | User'.
+  Property 'name' does not exist on type 'string'.
+components/events/EventDetail.tsx(33,20): error TS2345: Argument of type 'ParamValue' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+components/events/EventDetail.tsx(114,63): error TS2367: This comparison appears to be unintentional because the types '"attendee"' and '"super Admin"' have no overlap.
+components/events/EventDetail.tsx(120,63): error TS2367: This comparison appears to be unintentional because the types '"attendee"' and '"super Admin"' have no overlap.
+components/events/EventDetail.tsx(251,77): error TS2322: Type '(id: string, entrycode: string) => Promise<any>' is not assignable to type '(id: string) => void'.
+  Target signature provides too few arguments. Expected 2 or more, but got 1.
+components/events/EventForm.tsx(90,7): error TS2322: Type 'string' is not assignable to type 'Date'.
+components/events/EventForm.tsx(171,39): error TS2345: Argument of type 'ChangeEvent<HTMLTextAreaElement>' is not assignable to parameter of type 'ChangeEvent<HTMLInputElement>'.
+  Type 'HTMLTextAreaElement' is missing the following properties from type 'HTMLInputElement': accept, align, alt, capture, and 29 more.
+components/events/EventForm.tsx(204,23): error TS2322: Type '{ name: string; mode: "single"; selected: Date; onSelect: (selectDate: Date) => void; disabled: (date: Date) => boolean; initialFocus: true; }' is not assignable to type 'IntrinsicAttributes & (DayPickerDefaultProps | DayPickerSingleProps | DayPickerMultipleProps | DayPickerRangeProps)'.
+  Property 'name' does not exist on type 'IntrinsicAttributes & DayPickerSingleProps'.
+components/events/EventForm.tsx(212,29): error TS2322: Type '{ name: string; value: string; }' is not assignable to type 'EventTarget & HTMLInputElement'.
+  Type '{ name: string; value: string; }' is missing the following properties from type 'EventTarget': addEventListener, dispatchEvent, removeEventListener
+components/events/EventForm.tsx(292,23): error TS2322: Type '{ name: string; value: string; }' is not assignable to type 'EventTarget & HTMLInputElement'.
+  Type '{ name: string; value: string; }' is missing the following properties from type 'EventTarget': addEventListener, dispatchEvent, removeEventListener
+components/events/EventForm.tsx(305,79): error TS2339: Property '_id' does not exist on type '{ id: string; Category_name: string; }'.
+components/events/EventForm.tsx(305,101): error TS2339: Property '_id' does not exist on type '{ id: string; Category_name: string; }'.
+components/events/EventFormEdit.tsx(80,14): error TS2554: Expected 1-2 arguments, but got 0.
+components/events/EventFormEdit.tsx(130,28): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(name: string, value: string | Blob): void', gave the following error.
+    Argument of type 'number' is not assignable to parameter of type 'string | Blob'.
+  Overload 2 of 3, '(name: string, value: string): void', gave the following error.
+    Argument of type 'number' is not assignable to parameter of type 'string'.
+  Overload 3 of 3, '(name: string, blobValue: Blob, filename?: string): void', gave the following error.
+    Argument of type 'number' is not assignable to parameter of type 'Blob'.
+components/events/EventFormEdit.tsx(277,48): error TS2339: Property 'Category_name' does not exist on type 'string | { _id?: string; }'.
+  Property 'Category_name' does not exist on type 'string'.
+components/events/EventFormEdit.tsx(277,107): error TS2339: Property 'Category_name' does not exist on type 'string | { _id?: string; }'.
+  Property 'Category_name' does not exist on type 'string'.
+components/events/EventFormEdit.tsx(283,52): error TS2339: Property '_id' does not exist on type '{ id: string; Category_name: string; }'.
+components/events/EventFormEdit.tsx(283,74): error TS2339: Property '_id' does not exist on type '{ id: string; Category_name: string; }'.
+components/events/EventsList.tsx(42,20): error TS2554: Expected 1-2 arguments, but got 0.
+components/events/EventsList.tsx(104,18): error TS2740: Type '{ event: any; setFavariteId: (event: Event) => void; setPendingEvent: (event: Event) => void; }' is missing the following properties from type 'EventCardProps': Event_title, Description, Date, Time, and 6 more.
+components/favorites/FavoritesList.tsx(82,50): error TS2339: Property '_id' does not exist on type 'string'.
+components/favorites/FavoritesList.tsx(94,41): error TS2339: Property '_id' does not exist on type 'string'.
+components/favorites/FavoritesList.tsx(120,17): error TS2339: Property '_id' does not exist on type 'string'.
+components/favorites/FavoritesList.tsx(171,15): error TS2322: Type 'Dispatch<SetStateAction<string>>' is not assignable to type '(event: Event) => void'.
+  Types of parameters 'value' and 'event' are incompatible.
+    Type 'Event' is not assignable to type 'SetStateAction<string>'.
+components/forgetpassword/forgetPassword.tsx(50,9): error TS2552: Cannot find name 'newPassword'. Did you mean 'newpassword'?
+components/forgetpassword/forgetPassword.tsx(50,43): error TS2552: Cannot find name 'newPassword'. Did you mean 'newpassword'?
+components/home/CategorySection.tsx(58,42): error TS2339: Property '_id' does not exist on type 'Event'.
+components/home/CategorySection.tsx(59,50): error TS2339: Property '_id' does not exist on type 'Event'.
+components/home/CategorySection.tsx(62,38): error TS2339: Property 'image' does not exist on type 'Event'.
+components/home/CategorySection.tsx(63,38): error TS2339: Property 'Category' does not exist on type 'Event'.
+components/home/CategorySection.tsx(69,83): error TS2339: Property 'Category' does not exist on type 'Event'.
+components/home/CTASection.tsx(10,11): error TS2339: Property 'user' does not exist on type 'AuthContextType'.
+components/home/FeaturedEvents.tsx(81,14): error TS2740: Type '{ key: string; event: Event; onToggleFavorite: () => void; }' is missing the following properties from type 'EventCardProps': Event_title, Description, Date, Time, and 8 more.
+components/home/FeaturedEventsPreview.tsx(71,72): error TS2339: Property 'Category_name' does not exist on type 'string | Category'.
+  Property 'Category_name' does not exist on type 'string'.
+components/home/FeaturedEventsPreview.tsx(94,79): error TS2339: Property 'toFixed' does not exist on type 'string | number'.
+  Property 'toFixed' does not exist on type 'string'.
+components/LayoutShell/LayOutShell.tsx(16,8): error TS2367: This comparison appears to be unintentional because the types '"admin" | "organizer" | "attendee"' and '"super Admin"' have no overlap.
+components/LayoutShell/LayOutShell.tsx(21,8): error TS2367: This comparison appears to be unintentional because the types '"admin" | "organizer" | "attendee"' and '"super Admin"' have no overlap.
+components/models/Eventstatusmodel.tsx(63,30): error TS2554: Expected 0 arguments, but got 2.
+components/organizerdashboard/AssignEvents.tsx(261,24): error TS2345: Argument of type 'string | User' is not assignable to parameter of type 'string'.
+  Type 'User' is not assignable to type 'string'.
+components/organizerdashboard/AssignEvents.tsx(380,57): error TS2551: Property 'upcoming' does not exist on type '{ Completed: { className: string; text: string; }; Delayed: { className: string; text: string; }; Cancelled: { className: string; text: string; }; Upcoming: { className: string; text: string; }; }'. Did you mean 'Upcoming'?
+components/organizerdashboard/AssignEvents.tsx(623,9): error TS2322: Type '{ isOpen: boolean; onClose: () => void; event: any; getAssignEvents: (organizationId: string, userId: string) => Promise<any>; }' is not assignable to type 'IntrinsicAttributes & EventStatusModalProps'.
+  Property 'getAssignEvents' does not exist on type 'IntrinsicAttributes & EventStatusModalProps'.
+components/organizerdashboard/categoryes.tsx(96,9): error TS2322: Type 'Dispatch<SetStateAction<boolean>>' is not assignable to type '() => SetStateAction<boolean>'.
+  Target signature provides too few arguments. Expected 1 or more, but got 0.
+components/organizerdashboard/categoryes.tsx(98,9): error TS2322: Type 'Dispatch<SetStateAction<string>>' is not assignable to type '() => SetStateAction<string>'.
+  Target signature provides too few arguments. Expected 1 or more, but got 0.
+components/organizerdashboard/categoryes.tsx(102,9): error TS2322: Type 'Dispatch<SetStateAction<string>>' is not assignable to type '() => SetStateAction<string>'.
+  Target signature provides too few arguments. Expected 1 or more, but got 0.
+components/organizerdashboard/categoryes.tsx(103,9): error TS2322: Type 'Dispatch<SetStateAction<string>>' is not assignable to type '() => SetStateAction<string>'.
+  Target signature provides too few arguments. Expected 1 or more, but got 0.
+components/organizerdashboard/eventmanagement.tsx(107,18): error TS2554: Expected 1-2 arguments, but got 0.
+components/organizerdashboard/eventmanagement.tsx(165,22): error TS2872: This kind of expression is always truthy.
+components/organizerdashboard/eventmanagement.tsx(551,36): error TS2345: Argument of type '(p: any) => number' is not assignable to parameter of type 'number'.
+components/organizerdashboard/eventmanagement.tsx(614,36): error TS2345: Argument of type '(p: any) => number' is not assignable to parameter of type 'number'.
+components/paymentsModel/paymentmodel.tsx(237,50): error TS2554: Expected 1 arguments, but got 2.
+components/ReduxSlices/CreateEventSlice.tsx(39,33): error TS2554: Expected 2 arguments, but got 1.

@@ -178,9 +178,9 @@ export const updateEvents = async (id: any,formData: any) => {
 
 
 
-export const getEvents = async (organizationId:string) => {
+export const getEvents = async (organizationId?:string) => {
    try {
-      const response = await getData(`/event/get-events?organizationId=${organizationId}`)
+      const response = await getData(organizationId ? `/event/get-events?organizationId=${organizationId}` : "/event/get-events")
       return response
    } catch (error) {
       throw error
@@ -274,9 +274,9 @@ export const deleteCategory = async (id: string) => {
 }
 
 
-export const getAllCategory = async (organizationId:string) => {
+export const getAllCategory = async (organizationId?:string) => {
    try {
-      const response = await getData(`/category/get-all-category?organizationId=${organizationId}`)
+      const response = await getData(organizationId ? `/category/get-all-category?organizationId=${organizationId}` : "/category/get-all-category")
       return response
    } catch (error) {
       throw error

@@ -25,6 +25,7 @@ import { getAllCategoryThunk, } from "../ReduxSlices/CategorySlice"
 import { getAllOrganizerThunk } from "../ReduxSlices/UserSlice"
 import { updateEventsThunk, getAllEventsThunk } from "../ReduxSlices/CreateEventSlice"
 import { Loader2 } from "lucide-react"
+import type { Resolver } from "react-hook-form"
 
 const formSchema = z.object({
   Event_title: z.string().min(3, { message: "Title must be at least 3 characters." }),
@@ -33,7 +34,7 @@ const formSchema = z.object({
   Time: z.string({ required_error: "A time is required." }),
   location: z.string().min(3, { message: "Location must be at least 3 characters." }),
   Category: z.string({ required_error: "Please select a category." }),
-  Price: z.number().refine(val => !isNaN(Number(val)) && Number(val) >= 0, {
+  Price: z.coerce.number().refine(val => !isNaN(val) && val >= 0, {
     message: "Price must be a valid number.",
   }),
   image: z
@@ -53,9 +54,15 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>
 
+export type EventEditData = Partial<Omit<FormValues, "image" | "Category"> & {
+  Date?: string
+  image?: File | string | null
+  Category?: string | { _id?: string; Category_name?: string }
+}>
+
 type Props = {
-  editdata: Partial<FormValues & { Date?: string, image?: string }>
-  setEditData: React.Dispatch<React.SetStateAction<Partial<FormValues>>>
+  editdata: EventEditData
+  setEditData: React.Dispatch<React.SetStateAction<EventEditData>>
   id: string
 }
 
@@ -71,12 +78,12 @@ export default function EventFormEdit({ editdata, setEditData, id }: Props) {
 
   useEffect(() => {
     dispatch(getAllOrganizerThunk());
-    dispatch(getAllCategoryThunk());
+    dispatch(getAllCategoryThunk(undefined));
   }, [auth])
 
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(formSchema) as Resolver<FormValues>,
     defaultValues: {
       Event_title: "",
       Description: "",
@@ -84,7 +91,7 @@ export default function EventFormEdit({ editdata, setEditData, id }: Props) {
       Time: "",
       location: "",
       Category: "",
-      Price: "",
+      Price: 0,
       image: null,
       
     }
@@ -95,11 +102,11 @@ export default function EventFormEdit({ editdata, setEditData, id }: Props) {
     form.reset({
       Event_title: editdata?.Event_title || "",
       Description: editdata?.Description || "",
-      eventdate: editdata?.Date ? new Date(editdata.Date) : new Date(),
+      eventdate: editdata?.eventdate ?? (editdata?.Date ? new Date(editdata.Date) : new Date()),
       Time: editdata?.Time || "",
       location: editdata?.location || "",
-      Category: editdata?.Category?._id || "",
-      Price: editdata?.Price || "",
+      Category: typeof editdata?.Category === "string" ? editdata.Category : editdata?.Category?._id || "",
+      Price: Number(editdata?.Price) || 0,
       image: null,
        
     });
@@ -121,7 +128,7 @@ export default function EventFormEdit({ editdata, setEditData, id }: Props) {
   formData.append('Time', data.Time);
   formData.append('location', data.location);
   formData.append('Category', data.Category);
-  formData.append('Price', data.Price);
+  formData.append('Price', String(data.Price));
  
 
   if (data.image instanceof File) {
@@ -268,13 +275,13 @@ export default function EventFormEdit({ editdata, setEditData, id }: Props) {
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder={
-                          !editdata?.Category?.Category_name ? "Select a Organizer" : editdata?.Category?.Category_name
+                          typeof editdata?.Category === "object" && editdata.Category?.Category_name ? editdata.Category.Category_name : "Select a category"
                         } />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {allcategory?.map((category: { id: string, Category_name: string }) => (
-                        <SelectItem key={category?._id} value={category?._id}>
+                      {allcategory?.map((category: { id: string, _id?: string, Category_name: string }) => (
+                        <SelectItem key={category?._id ?? category.id} value={category?._id ?? category.id}>
                           {category?.Category_name}
                         </SelectItem>
                       ))}
@@ -396,4 +403,5 @@ export default function EventFormEdit({ editdata, setEditData, id }: Props) {
     </Form>
   )
 }
+
 

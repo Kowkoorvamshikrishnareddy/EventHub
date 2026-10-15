@@ -31,8 +31,8 @@ const AdminPaymentSheet = ({ formdata, handleCreateAdmin, isSheetOpen, setIsShee
   const [isVerifyingPayment, setIsVerifyingPayment] = useState(false)
   const { auth } = useAuth()
   const { toast } = useToast()
-  const [orderformData, setOrderFormData] = useState({})
-  const [getOrderData, setGetOrderData] = useState({})
+  const [orderformData, setOrderFormData] = useState<any>({})
+  const [getOrderData, setGetOrderData] = useState<any>({})
 
   // Default user data as provided
   const defaultUserData = {
@@ -464,5 +464,6 @@ const AdminPaymentSheet = ({ formdata, handleCreateAdmin, isSheetOpen, setIsShee
 }
 
 export default AdminPaymentSheet
+
 
 

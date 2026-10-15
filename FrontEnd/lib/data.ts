@@ -435,5 +435,5 @@ export const stats = {
   totalEvents: events.length,
   totalUsers: users.length,
   totalCategories: categories.length,
-  totalAttendees: events.reduce((sum, event) => sum + event.attendees, 0),
+  totalAttendees: events.reduce((sum, event) => sum + (event.attendees ?? 0), 0),
 }

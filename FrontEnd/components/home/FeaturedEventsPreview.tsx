@@ -68,13 +68,13 @@ export default function FeaturedEventsPreview({evetsdata,isLoading}:{evetsdata:E
                 <Link href={`/events/${event?._id}`} className="block">
                   <div className="flex justify-between items-start mb-3">
                     <h3 className="text-white font-medium text-xl">{event?.Event_title}</h3>
-                    <Badge className="bg-primary/80">{event?.Category?.Category_name}</Badge>
+                    <Badge className="bg-primary/80">{typeof event?.Category === "object" ? event.Category?.Category_name : event?.Category_name ?? event?.Category}</Badge>
                   </div>
                   <div className="flex flex-col space-y-3 text-sm text-gray-300">
                     <div className="flex items-center">
                       <Calendar className="h-4 w-4 mr-2 text-primary" />
                       <span>
-                        {new Date(event?.Date).toLocaleDateString("en-US", {
+                        {new Date(event?.Date ?? event?.date ?? Date.now()).toLocaleDateString("en-US", {
                           month: "short",
                           day: "numeric",
                           year: "numeric",
@@ -91,7 +91,7 @@ export default function FeaturedEventsPreview({evetsdata,isLoading}:{evetsdata:E
                     </div>
                   </div>
                   <div className="mt-4 pt-4 border-t border-white/20 flex justify-between items-center">
-                    <span className="text-primary font-medium">₹{event?.Price.toFixed(2)}</span>
+                    <span className="text-primary font-medium">₹{Number(event?.Price ?? event?.price ?? 0).toFixed(2)}</span>
                     <span className="text-white/70 text-sm group-hover:text-white transition-colors">
                       View Details →
                     </span>

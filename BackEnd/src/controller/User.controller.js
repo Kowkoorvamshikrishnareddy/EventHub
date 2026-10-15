@@ -99,31 +99,25 @@ const userRole = Array.isArray(role) ? role[0] : role;
   userData.membershipType = membershipType;
     }
    
-     console.log("Creating user:",userData)
     // Create user
     const newUser = await User.create(userData);
-
-    // Send login password email
-    await sendOtpToMail({
-      user: newUser.name,
-      email: newUser.email,
-      subject: "Your Password for Event Login",
-      message: `Dear user, your PASSWORD for login is: ${password}`,
-      password: password,
-      type: "password",
-    });
+    const safeUser = newUser.toObject();
+    delete safeUser.password;
+    delete safeUser.otp;
+    delete safeUser.otpExpiry;
 
     return res
       .status(201)
       .json(
         new ApiResponse(
           201,
-          { newUser, email },
-          "Your password has been sent to your email."
+          { newUser: safeUser, email },
+          "Account created successfully."
         )
       );
   } catch (error) {
-    throw new ApiError(400, error.message);
+    if (error instanceof ApiError) throw error;
+    throw new ApiError(500, "Unable to create the account");
   }
 });
 
@@ -154,7 +148,6 @@ export const loginUser = asynchandler(async (req, res) => {
   try {
     const { email, password } = req.body;
  
-    console.log("email",email,"password",password)
     // 1️ Validate input
     if (!email || !password) {
       throw new ApiError(400, "All fields are required");
@@ -165,7 +158,6 @@ export const loginUser = asynchandler(async (req, res) => {
     if (!user) {
       throw new ApiError(404, "please chek your email");
     }
-    console.log("user",user)
 
     // 3️ Check password
     if (user.role === "super Admin") {
@@ -184,19 +176,13 @@ export const loginUser = asynchandler(async (req, res) => {
     const otp = generateOTP();
     const expiry = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes from now
       
-    console.log("otp",otp)
     user.otp = otp;
     user.otpExpiry = expiry;
     await user.save();
 
-    const finduser = await User.findOne({ email });
-    console.log("finduser",finduser)
-
- 
-
     // 5️ Send OTP email
     await sendOtpToMail({
-      user: finduser.name,
+      user: user.name,
       email: user.email,
       subject: "Your OTP for Event Login",
       message: `Dear user, your OTP for login is: ${otp}. It is valid for 5 minutes.`,
@@ -659,15 +645,7 @@ export const changePassword = asynchandler(async (req, res) => {
     }
 
     // 4. Direct password assignment only for super admin
-    if (user.role === "super Admin") {
-      user.password = newpassword; // ⚠️ This assumes password will be hashed in a pre-save hook
-      await user.save();
-      return res
-        .status(200)
-        .json(new ApiResponse(200, null, "Password changed successfully"));
-    }
-
-    // 5. Hash password for regular users
+    // Passwords are always stored as bcrypt hashes, including for administrative users.
     const hashedPassword = await bcrypt.hash(newpassword, 10);
     user.password = hashedPassword;
     await user.save();

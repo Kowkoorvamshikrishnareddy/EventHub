@@ -42,6 +42,7 @@ export default function AttendeeBookingsTable() {
   const handleCancel = async () => {
     try {
        setIsLoading(true)
+      if (!selectedBooking) return
       const response = await removeRegisterEvent(selectedBooking)
       if (response?.data) {
         toast({
@@ -91,7 +92,7 @@ export default function AttendeeBookingsTable() {
             <div key={index} className="h-12 bg-gray-200 rounded animate-pulse"></div>
           ))}
         </div>
-      ) : auth?.registered_attendees === 0 ? (
+      ) : !auth?.registered_attendees?.length ? (
         <div className="text-center py-8">
           <h3 className="text-lg font-medium">No bookings found</h3>
           <p className="text-muted-foreground mb-4">You haven't registered for any events yet.</p>
@@ -112,13 +113,13 @@ export default function AttendeeBookingsTable() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {auth?.registered_attendees?.map((booking:string) => (
-                <TableRow key={booking?._id}>
+              {auth?.registered_attendees?.map((booking) => (
+                <TableRow key={booking?._id ?? booking?.id}>
                   <TableCell className="font-medium">{booking?.Event_title}</TableCell>
                   <TableCell>
                     <div className="flex items-center">
                       <Calendar className="h-4 w-4 mr-1 text-gray-500" />
-                      {format(new Date(booking?.Date), "MMM dd, yyyy")}
+                      {format(new Date(booking?.Date ?? booking?.date ?? Date.now()), "MMM dd, yyyy")}
                     </div>
                   </TableCell>
                   <TableCell>
@@ -127,21 +128,21 @@ export default function AttendeeBookingsTable() {
                       {booking?.location}
                     </div>
                   </TableCell>
-                  <TableCell>{getStatusBadge(booking?.date)}</TableCell>
+                  <TableCell>{getStatusBadge(String(booking?.Date ?? booking?.date ?? ""))}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
                       <Button variant="outline" size="sm" asChild>
-                        <Link href={`/events/${booking?._id}`}>
+                        <Link href={`/events/${booking?._id ?? booking?.id}`}>
                           <Eye className="mr-2 h-4 w-4" />
                           View
                         </Link>
                       </Button>
-                      {new Date(booking?.Date) > new Date() && (
+                      {new Date(booking?.Date ?? booking?.date ?? 0) > new Date() && (
                         <Button
                           variant="outline"
                           size="sm"
                           className="text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground"
-                          onClick={() => confirmCancel(booking?._id)}
+                          onClick={() => confirmCancel(booking?._id ?? booking?.id ?? "")}
                         >
                           <X className="mr-2 h-4 w-4" />
                           Cancel

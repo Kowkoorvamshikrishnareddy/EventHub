@@ -15,7 +15,7 @@ import { CreateOrder, VerifyPayment } from "../ApiServices/ApiServices"
 interface PaymentModalProps {
   eventdata: any
   setPaymentData: (data: any) => void
-  handleRegisterEvent: (id: string) => void
+  handleRegisterEvent: (id: string, entrycode: string) => void | Promise<unknown>
 }
  
 declare global {
@@ -31,8 +31,8 @@ const PaymentModal = ({ eventdata, setPaymentData, handleRegisterEvent }: Paymen
   const [isVerifyingPayment, setIsVerifyingPayment] = useState(false)
   const { auth } = useAuth()
   const { toast } = useToast()
-  const [orderformData, setOrderFormData] = useState({})
-  const [getOrderData, setGetOrderData] = useState({})
+  const [orderformData, setOrderFormData] = useState<any>({})
+  const [getOrderData, setGetOrderData] = useState<any>({})
  
   // Initialize order form data
   useEffect(() => {
@@ -462,6 +462,7 @@ const PaymentModal = ({ eventdata, setPaymentData, handleRegisterEvent }: Paymen
 }
 
 export default PaymentModal
+
 
 
 

@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Loader2 } from "lucide-react"
 import React from "react"
+import type { Dispatch, SetStateAction } from "react"
 
 export function CategoryModel({
   open,
@@ -27,13 +28,13 @@ export function CategoryModel({
   handleSubmitCategory
 }: {
   open: boolean,
-  setOpen: () => React.SetStateAction<boolean>,
+  setOpen: Dispatch<SetStateAction<boolean>>,
   loading: Boolean,
-  setCategory: () => React.SetStateAction<string>,
+  setCategory: Dispatch<SetStateAction<string>>,
   action: string
-  setAction: () => React.SetStateAction<string>,
+  setAction: Dispatch<SetStateAction<string>>,
   editcategory: string,
-  setEditCategory: () => React.SetStateAction<string>,
+  setEditCategory: Dispatch<SetStateAction<string>>,
   category: string,
   handleSubmitCategory: () => void
 }) {

@@ -11,7 +11,7 @@ import { useEffect } from "react"
 import { Smartphone } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/lib/auth/auth-provider"
-const OtpModel = ({ openotpModel, HandleCloseOtpModel }: { openotpModel: boolean, HandleCloseOtpModel: () => boolean }) => {
+const OtpModel = ({ openotpModel, HandleCloseOtpModel }: { openotpModel: boolean, HandleCloseOtpModel: () => void }) => {
 
     const [email, setEmail] = useState("")
     const [otp, setOtp] = useState("")
@@ -79,7 +79,7 @@ const OtpModel = ({ openotpModel, HandleCloseOtpModel }: { openotpModel: boolean
                 }
             }
 
-        } catch (error) {
+        } catch (error: any) {
             setOtpLoading(false)
             toast({
                 title: "Error",
@@ -102,7 +102,7 @@ const OtpModel = ({ openotpModel, HandleCloseOtpModel }: { openotpModel: boolean
                 setResendOtp(false)
             }
 
-        } catch (error) {
+        } catch (error: any) {
             setResendOtp(false)
             toast({
                 title: "Error",
@@ -192,3 +192,4 @@ const OtpModel = ({ openotpModel, HandleCloseOtpModel }: { openotpModel: boolean
 }
 
 export default OtpModel
+

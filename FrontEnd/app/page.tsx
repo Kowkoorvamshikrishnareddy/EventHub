@@ -12,6 +12,7 @@ import { useState, useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "@/lib/store"
 import { getAllEventsThunk } from "@/components/ReduxSlices/CreateEventSlice"
 import axios from "axios"
+import type { Event } from "@/lib/types"
 
 
 export default function Home() {
@@ -35,7 +36,7 @@ export default function Home() {
       })
     } else {
       const getAllEventsWithoutAuth = async () => {
-        const apiURL = `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1"}/event/get-allevents-without-auth`
+        const apiURL = `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:6000/api/v1"}/event/get-allevents-without-auth`
         setIsLoading(true)
         try {
           const response = await axios.get(apiURL);

@@ -628,10 +628,10 @@ import { Badge } from "@/components/ui/badge"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts"
 
 export default function MonthlyRevenueDashboard({ monthlyRevenue }: any) {
-  const [selectedMonth, setSelectedMonth] = useState(null)
+  const [selectedMonth, setSelectedMonth] = useState<string | null>(null)
   const [showDetails, setShowDetails] = useState(false)
 
-  const formatCurrency = (amount) => {
+  const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-IN", {
       style: "currency",
       currency: "INR",
@@ -639,7 +639,7 @@ export default function MonthlyRevenueDashboard({ monthlyRevenue }: any) {
     }).format(amount)
   }
 
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-IN", {
       day: "2-digit",
       month: "short",
@@ -660,12 +660,12 @@ export default function MonthlyRevenueDashboard({ monthlyRevenue }: any) {
   // Check if there's no data
   const hasData = Object.keys(monthlyRevenue).length > 0
 
-  const handleBarClick = (data) => {
+  const handleBarClick = (data: { month: string }) => {
     setSelectedMonth(data.month)
     setShowDetails(true)
   }
 
-  const getBarColor = (month) => {
+  const getBarColor = (month: string) => {
     if (selectedMonth === month) return "#10B981" // Green for selected
     return "#3B82F6" // Blue for default
   }
@@ -720,7 +720,7 @@ export default function MonthlyRevenueDashboard({ monthlyRevenue }: any) {
                       tickFormatter={(value) => `₹${(value / 1000).toFixed(1)}K`}
                     />
                     <Tooltip
-                      formatter={(value, name, props) => [formatCurrency(value), "Monthly Revenue"]}
+                      formatter={(value, name, props) => [formatCurrency(Number(value)), "Monthly Revenue"]}
                       labelFormatter={(label) => `${label} 2025`}
                       contentStyle={{
                         backgroundColor: "rgba(255,255,255,0.95)",
@@ -799,7 +799,7 @@ export default function MonthlyRevenueDashboard({ monthlyRevenue }: any) {
                         </tr>
                       </thead>
                       <tbody>
-                        {monthlyRevenue[selectedMonth].payments.map((payment, index) => (
+                        {monthlyRevenue[selectedMonth].payments.map((payment: any, index: number) => (
                           <tr
                             key={payment._id}
                             className={`hover:bg-gray-50 transition-colors ${

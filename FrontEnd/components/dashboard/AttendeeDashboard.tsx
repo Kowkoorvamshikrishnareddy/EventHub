@@ -212,8 +212,8 @@ export default function AttendeeDashboard() {
   useEffect(() => {
     if (auth?.registered_attendees) {
       const now = new Date()
-      const upcoming = auth.registered_attendees.filter((event) => new Date(event.Date) > now).length
-      const past = auth.registered_attendees.filter((event) => new Date(event.Date) <= now).length
+      const upcoming = auth.registered_attendees.filter((event) => new Date(event.Date ?? event.date ?? 0) > now).length
+      const past = auth.registered_attendees.filter((event) => new Date(event.Date ?? event.date ?? 0) <= now).length
 
       setStats({
         upcomingEvents: upcoming,

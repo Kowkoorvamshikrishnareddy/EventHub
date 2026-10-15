@@ -232,7 +232,7 @@ export default function AssignEvents() {
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
   const [selectedEvent, setSelectedEvent] = useState<any>(null)
   const [isRefreshing, setIsRefreshing] = useState(false)
-  const [selectEvent, setSelectEvent] = useState({})
+  const [selectEvent, setSelectEvent] = useState<any>({})
 
    
 
@@ -258,7 +258,7 @@ export default function AssignEvents() {
 
   useEffect(() => {
      if(auth && auth.createdBy && auth._id) {
-       getAssignEvents(auth.createdBy,auth._id)
+       getAssignEvents(typeof auth.createdBy === "string" ? auth.createdBy : auth.createdBy._id ?? "", auth._id)
      }
   }, [auth])
 
@@ -377,7 +377,7 @@ export default function AssignEvents() {
     }
 
     
-    const config = statusConfig[status] || statusConfig.upcoming
+    const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.Upcoming
     return <Badge className={`${config.className} border font-medium`}>{config.text}</Badge>
   }
 
@@ -620,7 +620,7 @@ export default function AssignEvents() {
           setSelectedEvent(null)
         }}
         event={selectedEvent}
-        getAssignEvents={getAssignEvents}
+        onStatusUpdate={getAssignEvents}
       />
       <EventDetailsModal
         isOpen={isDetailsModalOpen}
@@ -633,4 +633,5 @@ export default function AssignEvents() {
     </div>
   )
 }
+
 

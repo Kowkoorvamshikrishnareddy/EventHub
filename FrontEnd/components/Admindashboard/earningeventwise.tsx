@@ -75,7 +75,7 @@ export default function EventRevenueDashboard({ eventRevenue }: any) {
     const [expandedEvents, setExpandedEvents] = useState<string[]>([])
 
 
-    const events = Object.values(eventRevenue)
+    const events = Object.values(eventRevenue) as any[]
 
     // Calculate summary statistics
     const totalRevenue = events.reduce((sum, event) => sum + event.totalRevenue, 0)
@@ -279,7 +279,7 @@ export default function EventRevenueDashboard({ eventRevenue }: any) {
                                                                             </TableHeader>
                                                                             <TableBody>
                                                                                 <AnimatePresence>
-                                                                                    {event.payments.map((payment, paymentIndex) => (
+                        {event.payments.map((payment: any, paymentIndex: number) => (
                                                                                         <motion.tr
                                                                                             key={payment._id}
                                                                                             variants={paymentRowVariants}

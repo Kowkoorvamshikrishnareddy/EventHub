@@ -11,18 +11,13 @@ import {
 } from "react"
 import { getCurrentUser } from "@/components/ApiServices/ApiServices"
 import axios from "axios"
-
-interface User {
-  _id: string
-  name: string
-  email: string
-  role: string
-  membershipType?: string 
-}
+import type { Dispatch, SetStateAction } from "react"
+import type { User } from "@/lib/types"
 
 interface AuthContextType {
   auth: User | null
-  setAuth: (user: User | null) => void
+  user: User | null
+  setAuth: Dispatch<SetStateAction<User | null>>
   refreshUser: () => Promise<void>
   isLoading: boolean
 }
@@ -34,7 +29,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true)
 
   const API_BASE_URL =
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1";
+    process.env.NEXT_PUBLIC_API_URL || "http://localhost:6000/api/v1";
   const localpath = `${API_BASE_URL}/user/getprofile`
 
   const refreshUser = useCallback(async () => {
@@ -47,9 +42,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } else {
         setAuth(null)
       }
-    } catch (error) {
+    } catch (error: unknown) {
        console.log("error123",error)
-       if (error?.response?.status === 401 || error?.response?.status === 403) {
+       if (axios.isAxiosError(error) && (error.response?.status === 401 || error.response?.status === 403)) {
         setAuth(null);
       } else {
         console.error("Unexpected error in refreshUser:", error);
@@ -71,7 +66,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [refreshUser])
 
   return (
-    <AuthContext.Provider value={{ auth, setAuth, refreshUser, isLoading }}>
+    <AuthContext.Provider value={{ auth, user: auth, setAuth, refreshUser, isLoading }}>
       {children}
     </AuthContext.Provider>
   )

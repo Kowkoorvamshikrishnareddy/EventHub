@@ -5,33 +5,24 @@ import EventsList from "@/components/events/EventsList"
 import EventsLoading from "@/components/events/EventsLoading"
 import { useState, useEffect } from "react"
 import { filterEvents } from "@/components/ApiServices/ApiServices"
-import { set } from "date-fns"
 import { AddTofaverate } from "@/components/ApiServices/ApiServices"
 import { useToast } from "@/components/ui/use-toast"
 import { useAuth, } from "@/lib/auth/auth-provider"
-
-interface Event {
-  _id: string
-  title: string
-  description: string
-  image: string
-  date: string
-  location: string
-  category: string
-}
+import type { Event } from "@/lib/types"
+import axios from "axios"
 
 export default function EventsPage() {
 
   const [categoryName, setCategoryName] = useState("All Events")
-  const [favariteId, setFavariteId] = useState("")
-  const [favarvoate, setfavorate] = useState([])
-  const [pendingEvent, setPendingEvent] = useState(null);
+  const [favariteId, setFavariteId] = useState<Event | null>(null)
+  const [favarvoate, setfavorate] = useState<any[]>([])
+  const [pendingEvent, setPendingEvent] = useState<Event | null>(null);
 
   const { auth, setAuth } = useAuth()
 
   const { toast } = useToast()
 
-  const [filterData, setFilterdata] = useState([])
+  const [filterData, setFilterdata] = useState<any[]>([])
 
   const [loading, setLoading] = useState(true)
 
@@ -56,13 +47,16 @@ useEffect(() => {
         });
 
         setAuth((prev) => {
-          const alreadyFavorited = prev.favorate_events.some(
-            (e) => e._id === favariteId._id
+          if (!prev) return prev
+          const favorites = prev.favorate_events ?? []
+          const targetId = favariteId._id ?? favariteId.id
+          const alreadyFavorited = favorites.some(
+            (event) => (event._id ?? event.id) === targetId
           );
 
           const updatedFavorites = alreadyFavorited
-            ? prev.favorate_events.filter((e) => e._id !== favariteId._id)
-            : [...prev.favorate_events, favariteId];
+            ? favorites.filter((event) => (event._id ?? event.id) !== targetId)
+            : [...favorites, favariteId];
 
           return {
             ...prev,
@@ -79,13 +73,13 @@ useEffect(() => {
           variant: "destructive",
         });
       }
-    } catch (err) {
+    } catch (err: unknown) {
 
         console.log("err", err)
       toast({
         title: "Error",
         description:
-          err?.response?.data?.message || "Something went wrong.",
+          (axios.isAxiosError(err) && err.response?.data?.message) || "Something went wrong.",
         variant: "destructive",
       });
     } finally {
@@ -96,11 +90,11 @@ useEffect(() => {
   handleFavoriteToggle();
 }, [favariteId]);
 
-   const organizaionId = auth?._id
+  const organizaionId = auth?._id ?? ""
  useEffect(() => {
   if (!categoryName) return;
   setLoading(true);
-  filterEvents(organizaionId, categoryName,auth?.role,auth?.membershipType).then((res) => {
+  filterEvents(organizaionId, categoryName, auth?.role ?? "attendee", auth?.membershipType ?? "outer").then((res) => {
     setFilterdata(res?.data);
     setLoading(false);
   });

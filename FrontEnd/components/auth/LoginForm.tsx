@@ -52,7 +52,7 @@ export default function LoginForm() {
     },
   })
 
-  const handleloginFormChange = (field: string, value: string) => {
+  const handleloginFormChange = (field: keyof FormValues, value: string) => {
     form.setValue(field, value)
     dispatch(setloginformdata({ [field]: value }))
   }
@@ -84,7 +84,7 @@ export default function LoginForm() {
 
   const handleCreateAdmin = async () => {
     const fd = new FormData();
-    fd.append("file", avatarFile);  
+    if (avatarFile) fd.append("file", avatarFile)
   
     
     Object.entries(formdata).forEach(([key, value]) => {
@@ -119,7 +119,7 @@ export default function LoginForm() {
 
    const handleCreateAttendee = async () => {
     const fd = new FormData();
-    fd.append("file", avatarFile);  
+    if (avatarFile) fd.append("file", avatarFile)
     fd.append("role", "attendee");
     fd.append("membershipType", "outer");
      

@@ -13,12 +13,12 @@ export default function LayoutShell({ children }: { children: React.ReactNode })
   return (
     <>
       {/* Navbar only if not superadmin */}
-      {auth?.role !== "super Admin" && <Navbar />}
+      {(auth?.role as string | undefined) !== "super Admin" && <Navbar />}
       
       <main className="min-h-screen">{children}</main>
       
       {/* Footer also optional if you want to hide */}
-      {auth?.role !== "super Admin" && <Footer />}
+      {(auth?.role as string | undefined) !== "super Admin" && <Footer />}
     </>
   );
 }

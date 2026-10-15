@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { set, z } from "zod"
+import { z } from "zod"
 import { CalendarIcon, Clock, Loader2 } from "lucide-react"
 import { format } from "date-fns"
 import { Button } from "@/components/ui/button"
@@ -22,7 +22,7 @@ import { getAllCategoryThunk } from "../ReduxSlices/CategorySlice"
 import { useAuth } from "@/lib/auth/auth-provider"
 import { createEventsThunk, updateEventsThunk, deleteEventThunk, resetFormData } from "../ReduxSlices/CreateEventSlice"
 import { setFormData } from "../ReduxSlices/CreateEventSlice"
-import { create } from "domain"
+import type { Resolver } from "react-hook-form"
 
 
 const formSchema = z.object({
@@ -83,24 +83,21 @@ export default function EventForm() {
 
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(formSchema) as Resolver<FormValues>,
     defaultValues: {
       Event_title: createEventFormData?.Event_title || "",
       Description: createEventFormData?.Description || "",
-      eventdate: createEventFormData?.eventdate || "",
+      eventdate: createEventFormData?.eventdate ? new Date(createEventFormData.eventdate) : new Date(),
       Time: createEventFormData?.Time || "",
       location: createEventFormData?.location || "",
       Category: createEventFormData?.Category || "",
       Price: createEventFormData?.Price || "",
-      image:
-        createEventFormData?.image && createEventFormData.image instanceof File
-          ? createEventFormData.image
-          : undefined, 
+      image: imagefile ?? undefined,
     },
   });
 
 
-  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeInput = (e: { target: { name: string; value: string } }) => {
     const { name, value } = e.target;
     dispatch(setFormData({ [name]: value }));
   };
@@ -108,16 +105,16 @@ export default function EventForm() {
    
   const onSubmit = () => {
     const formDate = new FormData()
-    formDate.append("Event_title", createEventFormData?.Event_title)
-    formDate.append("Description", createEventFormData?.Description)
-    formDate.append("eventdate", createEventFormData?.eventdate)
-    formDate.append("Time", createEventFormData?.Time)
-    formDate.append("location", createEventFormData?.location)
-    formDate.append("Category", createEventFormData?.Category)
-    formDate.append("Price", createEventFormData?.Price)
-    formDate.append("Organizer", createEventFormData?.Organizer)
-    formDate.append("file", imagefile as File)
-    formDate.append("organizationId", auth?._id)
+    formDate.append("Event_title", createEventFormData?.Event_title ?? "")
+    formDate.append("Description", createEventFormData?.Description ?? "")
+    formDate.append("eventdate", createEventFormData?.eventdate ?? "")
+    formDate.append("Time", createEventFormData?.Time ?? "")
+    formDate.append("location", createEventFormData?.location ?? "")
+    formDate.append("Category", createEventFormData?.Category ?? "")
+    formDate.append("Price", String(createEventFormData?.Price ?? "0"))
+    formDate.append("Organizer", createEventFormData?.Organizer ?? "")
+    if (imagefile) formDate.append("file", imagefile)
+    formDate.append("organizationId", auth?._id ?? "")
     dispatch(createEventsThunk(formDate)).then((res) => {
 
       if (res.meta.requestStatus === "fulfilled") {
@@ -201,7 +198,6 @@ export default function EventForm() {
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
-                      name="eventdate"
                       mode="single"
                       selected={field.value ? new Date(field.value) : undefined}
                       onSelect={(selectDate) => {
@@ -301,8 +297,8 @@ export default function EventForm() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {allcategory?.map((category: { id: string, Category_name: string }) => (
-                      <SelectItem className="hover:text-white" key={category?._id} value={category?._id}>
+                    {allcategory?.map((category: { id: string, _id?: string, Category_name: string }) => (
+                      <SelectItem className="hover:text-white" key={category?._id ?? category.id} value={category?._id ?? category.id}>
                         {category?.Category_name}
                       </SelectItem>
                     ))}

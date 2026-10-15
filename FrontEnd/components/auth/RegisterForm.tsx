@@ -68,7 +68,7 @@ export default function RegisterForm() {
     },
   });
 
-  const handleFormChange = (field: string, value: string) => {
+  const handleFormChange = (field: keyof FormValues, value: string) => {
     form.setValue(field, value);
     dispatch(setFormData({ [field]: value }));
   };

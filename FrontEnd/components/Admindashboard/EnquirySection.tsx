@@ -92,7 +92,7 @@ export default function EnquiryTable() {
 
   const handleRejectConfirm = () => {
     if (enquiryStatusFormData.enquiryId && enquiryStatusFormData.reason) {
-      handleActions(enquiryStatusFormData.enquiryId, "rejected", enquiryStatusFormData.reason)
+      handleActions(enquiryStatusFormData.enquiryId, "reject", enquiryStatusFormData.reason)
     } else {
       toast({
         title: "Error",

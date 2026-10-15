@@ -40,6 +40,7 @@ import { EditUsers } from "@/components/ApiServices/ApiServices"
 import { useToast } from "@/components/ui/use-toast"
 import { useEffect } from "react"
 import CommonLoader from "@/components/commonloader/CommonLoader"
+import axios from "axios"
 
 // Add custom scrollbar styles
 const scrollbarStyles = `
@@ -66,7 +67,7 @@ export default function UserProfile() {
   const [showNewPassword, setShowNewPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [loader, setLoader] = useState(false)
-  const [editUser, setEditUser] = useState({})
+  const [editUser, setEditUser] = useState<any>({})
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -90,11 +91,12 @@ export default function UserProfile() {
         setLoader(false)
         setIsSheetOpen(false)
       }
-    } catch (error) {
+    } catch (error: unknown) {
       setLoader(false)
+      const message = axios.isAxiosError(error) ? error.response?.data?.message : undefined
       toast({
         title: "Error",
-        description: error?.response?.data?.message || "Failed to update profile. Please try again.",
+        description: message || "Failed to update profile. Please try again.",
         variant: "destructive",
       })
     }
@@ -145,15 +147,18 @@ export default function UserProfile() {
     return <CommonLoader />
   }
 
+  const registeredEvents = auth.registered_attendees ?? []
+  const favoriteEvents = auth.favorate_events ?? []
+  const getEventDate = (event: (typeof registeredEvents)[number]) => event.Date ?? event.date ?? Date.now()
   const stats = {
-    totalRegistrations: auth.registered_attendees?.length || 0,
-    favoriteEvents: auth.favorate_events?.length || 0,
-    upcomingEvents: auth.registered_attendees?.filter((event) => new Date(event.Date) > new Date()).length || 0,
-    pastEvents: auth.registered_attendees?.filter((event) => new Date(event.Date) <= new Date()).length || 0,
+    totalRegistrations: registeredEvents.length,
+    favoriteEvents: favoriteEvents.length,
+    upcomingEvents: registeredEvents.filter((event) => new Date(getEventDate(event)) > new Date()).length,
+    pastEvents: registeredEvents.filter((event) => new Date(getEventDate(event)) <= new Date()).length,
   }
 
-  const memberSince = format(new Date(auth.createdAt), "MMMM yyyy")
-  const lastUpdated = format(new Date(auth.updatedAt), "MMM dd, yyyy")
+  const memberSince = format(new Date(auth.createdAt ?? Date.now()), "MMMM yyyy")
+  const lastUpdated = format(new Date(auth.updatedAt ?? Date.now()), "MMM dd, yyyy")
 
   const container = {
     hidden: { opacity: 0 },
@@ -288,9 +293,9 @@ export default function UserProfile() {
                 <CardDescription>Your latest event interactions</CardDescription>
               </CardHeader>
               <CardContent>
-                {auth.registered_attendees?.length > 0 ? (
+                {registeredEvents.length > 0 ? (
                   <div className="max-h-96 overflow-y-auto pr-2 space-y-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-                    {auth.registered_attendees.map((event, index) => (
+                    {registeredEvents.map((event, index) => (
                       <div
                         key={event._id}
                         className="flex items-start gap-4 p-4 rounded-lg hover:bg-gray-50 transition-colors border border-gray-100"
@@ -303,7 +308,7 @@ export default function UserProfile() {
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-500 mb-3">
                             <div className="flex items-center gap-1">
                               <Calendar className="w-3 h-3" />
-                              {format(new Date(event.Date), "MMM dd, yyyy")}
+                              {format(new Date(getEventDate(event)), "MMM dd, yyyy")}
                             </div>
                             <div className="flex items-center gap-1">
                               <MapPin className="w-3 h-3" />
@@ -338,8 +343,8 @@ export default function UserProfile() {
                           )}
 
                           <div className="flex flex-wrap gap-2">
-                            <Badge variant={new Date(event.Date) > new Date() ? "default" : "secondary"}>
-                              {new Date(event.Date) > new Date() ? "Upcoming" : "Past"}
+                            <Badge variant={new Date(getEventDate(event)) > new Date() ? "default" : "secondary"}>
+                              {new Date(getEventDate(event)) > new Date() ? "Upcoming" : "Past"}
                             </Badge>
                             {getAttendanceStatusBadge(event.attendanceStatus || "pending")}
                           </div>
@@ -385,17 +390,17 @@ export default function UserProfile() {
                 <CardTitle className="flex items-center gap-2 text-lg">
                   <Heart className="w-5 h-5 text-red-500" />
                   Favorite Events
-                  {auth.favorate_events?.length > 0 && (
+                  {favoriteEvents.length > 0 && (
                     <Badge variant="outline" className="ml-auto">
-                      {auth.favorate_events.length}
+                      {favoriteEvents.length}
                     </Badge>
                   )}
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {auth.favorate_events?.length > 0 ? (
+                {favoriteEvents.length > 0 ? (
                   <div className="max-h-64 overflow-y-auto space-y-3 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-                    {auth.favorate_events.map((event) => (
+                    {favoriteEvents.map((event) => (
                       <div
                         key={event._id}
                         className="p-3 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors"
@@ -404,7 +409,7 @@ export default function UserProfile() {
                         <div className="space-y-2">
                           <div className="flex items-center gap-2 text-xs text-gray-500">
                             <Calendar className="w-3 h-3" />
-                            {format(new Date(event.Date), "MMM dd")}
+                            {format(new Date(event.Date ?? event.date ?? Date.now()), "MMM dd")}
                             <MapPin className="w-3 h-3 ml-2" />
                             {event.location}
                           </div>
@@ -589,3 +594,4 @@ export default function UserProfile() {
     </>
   )
 }
+

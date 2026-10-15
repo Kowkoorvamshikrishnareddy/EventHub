@@ -16,6 +16,7 @@ import { EditUsers } from "../ApiServices/ApiServices"
 import { useAuth } from "@/lib/auth/auth-provider"
 import { useEffect } from "react"
 import { useToast } from "../ui/use-toast"
+import axios from "axios"
 
 export default function UserProfile() {
   const [isSheetOpen, setIsSheetOpen] = useState(false)
@@ -24,10 +25,10 @@ export default function UserProfile() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [loader, setLoader] = useState(false)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
-  const [editUser, setEditUser] = useState({})
+  const [editUser, setEditUser] = useState<any>({})
   const { toast } = useToast()
   const { auth, refreshUser } = useAuth()
-  const[avatarImage,setAvatarImage] = useState(null)
+  const[avatarImage,setAvatarImage] = useState<File | null>(null)
 
   useEffect(() => {
     if (auth) {
@@ -115,7 +116,7 @@ export default function UserProfile() {
     try {
       setLoader(true)
        const fd = new FormData();
-      fd.append("file", avatarImage);  
+      if (avatarImage) fd.append("file", avatarImage)
       Object.entries(editUser).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
           fd.append(key, value as string);
@@ -133,11 +134,12 @@ export default function UserProfile() {
         setLoader(false)
         setIsSheetOpen(false)
       }
-    } catch (error) {
+    } catch (error: unknown) {
       setLoader(false)
+      const message = axios.isAxiosError(error) ? error.response?.data?.message : undefined
       toast({
         title: "Error",
-        description: error?.response?.data?.message || "Failed to update profile. Please try again.",
+        description: message || "Failed to update profile. Please try again.",
         variant: "destructive",
       })
     }
@@ -374,7 +376,7 @@ export default function UserProfile() {
     />
   ) : (
     <AvatarFallback className="text-xl font-semibold bg-blue-100 text-blue-600 rounded-none">
-      {getInitials(auth?.name)}
+      {getInitials(auth?.name ?? "")}
     </AvatarFallback>
   )}
 </Avatar>
@@ -382,11 +384,11 @@ export default function UserProfile() {
               <div className="space-y-2">
                 <CardTitle className="text-2xl">{auth?.name}</CardTitle>
                 <div className="flex items-center gap-2">
-                  <Badge className={getRoleColor(auth?.role)}>
+                  <Badge className={getRoleColor(auth?.role ?? "attendee")}>
                     <Shield className="h-3 w-3 mr-1" />
-                    {auth?.role.charAt(0).toUpperCase() + auth?.role.slice(1)}
+                    {(auth?.role ?? "attendee").charAt(0).toUpperCase() + (auth?.role ?? "attendee").slice(1)}
                   </Badge>
-                  <Badge className={getStatusColor(auth?.status)}>{auth?.status}</Badge>
+                  <Badge className={getStatusColor(auth?.status ?? "Active")}>{auth?.status ?? "Active"}</Badge>
                 </div>
               </div>
             </div>
@@ -420,16 +422,16 @@ export default function UserProfile() {
                     <Badge variant="outline">
                       {auth?.role == "admin"
                         ? ""
-                        : auth?.membershipType.charAt(0).toUpperCase() + auth?.membershipType.slice(1)}
+                        : (auth?.membershipType ?? "outer").charAt(0).toUpperCase() + (auth?.membershipType ?? "outer").slice(1)}
                     </Badge>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-gray-600">Member Since</span>
-                    <span className="text-sm">{formatDate(auth?.createdAt)}</span>
+                    <span className="text-sm">{formatDate(auth?.createdAt ?? "")}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-gray-600">Last Updated</span>
-                    <span className="text-sm">{formatDate(auth?.updatedAt)}</span>
+                    <span className="text-sm">{formatDate(auth?.updatedAt ?? "")}</span>
                   </div>
                 </div>
               </div>
@@ -440,3 +442,4 @@ export default function UserProfile() {
     </div>
   )
 }
+

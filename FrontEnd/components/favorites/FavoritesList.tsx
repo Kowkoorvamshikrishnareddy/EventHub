@@ -17,7 +17,7 @@ import { Loader2 } from "lucide-react"
 
 export default function FavoritesList() {
   const [favorites, setFavorites] = useState<Event[]>([])
-  const[favorate,setfavorate] = useState([])
+  const[favorate,setfavorate] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const[loading,setLoading] = useState(false)
   const dispatch = useAppDispatch();
@@ -26,7 +26,7 @@ export default function FavoritesList() {
 
   const { auth ,setAuth} = useAuth();
 
-    const[favariteId,setFavariteId] = useState("")
+    const[favariteId,setFavariteId] = useState<Event | null>(null)
 
   
 
@@ -56,7 +56,7 @@ export default function FavoritesList() {
   //            variant: "destructive",
   //          });
   //        }
-  //      } catch (err) {
+  //      } catch (err: any) {
   //        toast({
   //          title: "Error",
   //          description: err?.response?.data?.message || "Something went wrong.",
@@ -74,12 +74,13 @@ export default function FavoritesList() {
 
   useEffect(() => {
   const handleRemoveFavorite = async () => {
-    if (!favariteId) return;
+    const favoriteId = favariteId?._id ?? favariteId?.id
+    if (!favoriteId) return;
 
     try {
       setLoading(true);
 
-      const res = await AddTofaverate(favariteId._id); // toggle = remove here
+      const res = await AddTofaverate(favoriteId); // toggle = remove here
 
       if (res?.data) {
         toast({
@@ -88,12 +89,12 @@ export default function FavoritesList() {
         });
 
         // ✅ update only frontend UI — remove from current list
-        setAuth((prev) => ({
+        setAuth((prev) => prev ? ({
           ...prev,
-          favorate_events: prev.favorate_events.filter(
-            (e) => e._id !== favariteId._id
+          favorate_events: (prev.favorate_events ?? []).filter(
+            (e) => (e._id ?? e.id) !== favoriteId
           ),
-        }));
+        }) : prev);
 
         setfavorate(res.data); // optional
       } else {
@@ -104,7 +105,7 @@ export default function FavoritesList() {
           variant: "destructive",
         });
       }
-    } catch (err) {
+    } catch (err: any) {
       toast({
         title: "Error",
         description:
@@ -117,7 +118,7 @@ export default function FavoritesList() {
   };
 
   handleRemoveFavorite();
-}, [favariteId?._id]);
+}, [favariteId]);
 
 
 
@@ -156,7 +157,7 @@ export default function FavoritesList() {
 
   return (
     <div className="container mx-auto px-4 py-12">
-      {auth?.favorate_events?.length > 0 ? (
+      {Boolean(auth?.favorate_events?.length) ? (
         <motion.div
           variants={container}
           initial="hidden"
@@ -167,7 +168,6 @@ export default function FavoritesList() {
             <EventCard
               key={event._id}
               event={event}
-              title="remove"
               setFavariteId={setFavariteId}
               onToggleFavorite={() => handleToggleFavorite(event)}
               isFavorite={true}
@@ -194,3 +194,4 @@ export default function FavoritesList() {
 
   )
 }
+

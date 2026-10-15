@@ -410,7 +410,7 @@ export default function HeroSection() {
     e.preventDefault()
     try {
       setLoading(true)
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1"
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:6000/api/v1"
       const response = await axios.post(`${apiUrl}/enquiry/create-enquire`, formData)
       console.log("response", response)
       if (response.status == 200) {

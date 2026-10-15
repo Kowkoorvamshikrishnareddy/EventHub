@@ -32,7 +32,7 @@ import type { Event } from "@/lib/types"
 export default function EventsTable() {
   const [events, setEvents] = useState<Event[]>([])
 
-  const[selectedallIds,setSelectedIds] = useState([]);
+  const[selectedallIds,setSelectedIds] = useState<string[]>([]);
 
  
   const [selectedEvent, setSelectedEvent] = useState<string | null>(null)
@@ -44,7 +44,7 @@ export default function EventsTable() {
   const {allevents,loading} = useAppSelector((state) => state.createEvents);
 
   useEffect(() => {
-    dispatch(getAllEventsThunk());
+    dispatch(getAllEventsThunk(undefined));
   }, [dispatch,auth]);
  
 
@@ -74,13 +74,14 @@ export default function EventsTable() {
   const handleDelete = async () => {
     if (!selectedEvent) return
     try {
-      await deleteEvent(selectedEvent)
+      if (!auth?._id) return
+      await deleteEvent(auth._id, selectedEvent)
       setEvents((prev) => prev.filter((event) => event.id !== selectedEvent))
       toast({
         title: "Event deleted",
         description: "The event has been successfully deleted.",
       })
-      dispatch(getAllEventsThunk());
+      dispatch(getAllEventsThunk(undefined));
     } catch (error) {
       toast({
         title: "Error",
@@ -238,3 +239,4 @@ export default function EventsTable() {
     </div>
   )
 }
+

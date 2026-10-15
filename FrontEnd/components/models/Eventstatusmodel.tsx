@@ -25,7 +25,7 @@ interface EventStatusModalProps {
   isOpen: boolean
   onClose: () => void
   event: any
-  onStatusUpdate: () => Promise<any>
+  onStatusUpdate: (organizationId: string, userId: string) => Promise<any>
 }
 
 export function EventStatusModal({ isOpen, onClose, event, onStatusUpdate }: EventStatusModalProps) {
@@ -60,13 +60,13 @@ export function EventStatusModal({ isOpen, onClose, event, onStatusUpdate }: Eve
           description: response?.message || "Your event status has been updated successfully.",
           variant: "default",
         })
-        await onStatusUpdate(auth.createdBy, auth._id)
+        if (auth) await onStatusUpdate(String(auth.createdBy ?? ""), auth._id ?? "")
         setIsLoading(false)
         onClose()
         setEventStatus("")
         setEventUpdateMsg("")
       }
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "❌ Update Failed",
         description: error?.response?.data?.message || "Failed to update status. Please try again.",
@@ -272,4 +272,5 @@ export function EventStatusModal({ isOpen, onClose, event, onStatusUpdate }: Eve
     </Dialog>
   )
 }
+
 

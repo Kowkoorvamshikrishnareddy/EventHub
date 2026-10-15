@@ -1734,6 +1734,7 @@ interface Person {
   status: "Active" | "Inactive"
   membershipType?: "Inner" | "Outer" // Added new field
   avatar?: string // Added avatar field
+  image?: string
   createdAt: string
   updatedAt: string
 }
@@ -1857,6 +1858,7 @@ function UserManagement() {
 
   const fetchUsers = async () => {
     try {
+      if (!auth?._id) return
       const response = await getAllOrganizerAndAttendee(auth._id)
       if (response?.statuscode == 200) {
         setUsers(response?.data?.Users)
@@ -1872,7 +1874,7 @@ function UserManagement() {
 
   const fetchAssignedEvents = async (userId: string) => {
     try {
-      const response = await getAssignEvents(auth?._id, userId)
+      const response = await getAssignEvents(auth?._id ?? "", userId)
       if (response?.statuscode == 200) {
         setAssignedEvents(response?.data[0]?.eventIds || [])
       }
@@ -1985,7 +1987,7 @@ function UserManagement() {
   const handleDeleteUser = async (userId: string) => {
     setIsLoading(true)
     try {
-      const response = await DeleteUser(auth?._id, userId)
+      const response = await DeleteUser(auth?._id ?? "", userId)
       if (response?.statuscode == 200) {
         await fetchUsers()
         toast({
@@ -2044,7 +2046,7 @@ function UserManagement() {
 
   const handleSubmitUser = async () => {
     const fd = new FormData()
-    fd.append("file", avatarFile)
+    if (avatarFile) fd.append("file", avatarFile)
 
     // append all other fields from formdata
     Object.entries(formdata).forEach(([key, value]) => {

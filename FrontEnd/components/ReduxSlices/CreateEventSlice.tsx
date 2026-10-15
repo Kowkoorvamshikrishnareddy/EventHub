@@ -32,11 +32,11 @@ import {craeteEvents,updateEvents,deleteEvent,getEvents} from "../ApiServices/Ap
    )
 
 
-   export const deleteEventThunk = createAsyncThunk(
+export const deleteEventThunk = createAsyncThunk(
      'createEvents/deleteEventThunk',
-     async (id: any, { rejectWithValue }) => {
+     async ({ organizationId, id }: { organizationId: string; id: string }, { rejectWithValue }) => {
        try {
-         const response = await deleteEvent(id);
+         const response = await deleteEvent(organizationId, id);
          return response // ✅ If using Axios, return response.data instead of response
        } catch (error: any) {
          // ✅ Proper error structure for known error formats
@@ -47,11 +47,11 @@ import {craeteEvents,updateEvents,deleteEvent,getEvents} from "../ApiServices/Ap
      }
    )
 
-   export const getAllEventsThunk = createAsyncThunk(
+   export const getAllEventsThunk = createAsyncThunk<any, string | undefined>(
      'createEvents/getAllEventsThunk',
      async (id, thunkAPI) => {
        try {
-         const response = await getEvents(id);
+      const response = await getEvents(id);
          return response; // or response.data if using Axios
        } catch (error: any) {
          const message =
@@ -63,8 +63,8 @@ import {craeteEvents,updateEvents,deleteEvent,getEvents} from "../ApiServices/Ap
 
 
 const InitialsState = {
-      events:[],
-      allevents:[],
+      events: [] as any,
+      allevents: [] as any[],
       loading:false,
       error:"",
       createEventFormData:{
@@ -103,7 +103,7 @@ const UserSlice = createSlice({
         }),
         builder.addCase(createEventsThunk.rejected,(state,action)=>{
             state.loading = false
-            state.error = action.error.message
+            state.error = action.error.message ?? "Request failed"
         })
 
         // ================= Update Event ===================
@@ -117,7 +117,7 @@ const UserSlice = createSlice({
         }),
         builder.addCase(updateEventsThunk.rejected,(state,action)=>{
             state.loading = false
-            state.error = action.error.message
+            state.error = action.error.message ?? "Request failed"
         })
 
 
@@ -132,7 +132,7 @@ const UserSlice = createSlice({
         }),
         builder.addCase(deleteEventThunk.rejected,(state,action)=>{
             state.loading = false
-            state.error = action.error.message
+            state.error = action.error.message ?? "Request failed"
         })
 
 
@@ -148,7 +148,7 @@ const UserSlice = createSlice({
         }),
         builder.addCase(getAllEventsThunk.rejected,(state,action)=>{
             state.loading = false
-            state.error = action.error.message
+            state.error = action.error.message ?? "Request failed"
         })
 
     }
@@ -157,3 +157,4 @@ const UserSlice = createSlice({
 
 export const {setFormData,resetFormData} = UserSlice.actions
 export default UserSlice.reducer
+

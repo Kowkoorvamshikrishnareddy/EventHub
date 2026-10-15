@@ -72,7 +72,7 @@ export default function CategoriesTable() {
             description: "Your category has been successfully updated.",
           })
         }
-        dispatch(getAllCategoryThunk());
+        dispatch(getAllCategoryThunk(undefined));
         setOpen(false);
       })
       setCategory("");
@@ -194,3 +194,4 @@ export default function CategoriesTable() {
     </>
   )
 }
+

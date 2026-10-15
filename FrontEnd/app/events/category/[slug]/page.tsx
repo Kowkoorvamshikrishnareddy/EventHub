@@ -3,25 +3,25 @@ import CategoryHeader from "@/components/events/CategoryHeader"
 import CategoryEvents from "@/components/events/CategoryEvents"
 
 interface CategoryPageProps {
-  params: {
-    slug: string
-  }
+  params: Promise<{ slug: string }>
 }
 
-export function generateMetadata({ params }: CategoryPageProps): Metadata {
-  const categoryName = params.slug.charAt(0).toUpperCase() + params.slug.slice(1)
+export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
+  const { slug } = await params
+  const categoryName = slug.charAt(0).toUpperCase() + slug.slice(1)
 
   return {
     title: `${categoryName} Events | EventHub`,
-    description: `Browse all ${params.slug} events on EventHub`,
+    description: `Browse all ${slug} events on EventHub`,
   }
 }
 
-export default function CategoryPage({ params }: CategoryPageProps) {
+export default async function CategoryPage({ params }: CategoryPageProps) {
+  const { slug } = await params
   return (
     <div className="min-h-screen bg-gray-50 pt-16">
-      <CategoryHeader slug={params.slug} />
-      <CategoryEvents slug={params.slug} />
+      <CategoryHeader slug={slug} />
+      <CategoryEvents slug={slug} />
     </div>
   )
 }

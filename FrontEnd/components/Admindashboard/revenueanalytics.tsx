@@ -45,9 +45,9 @@ import PaymentHistory from "./paymentshistory"
    
   const [searchTerm, setSearchTerm] = useState("")
   const [activeTab, setActiveTab] = useState("events")
-  const[eventRevenue,setEventRevenue] = useState({})
+  const[eventRevenue,setEventRevenue] = useState<any>({})
   const[loader,setLoader] = useState(false)
-  const[paymentshisstry,setPaymentHistry] = useState({})
+  const[paymentshisstry,setPaymentHistry] = useState<any>({})
 
    const { auth } = useAuth()
 
@@ -55,7 +55,7 @@ import PaymentHistory from "./paymentshistory"
     const getEventsRevenueData = async()=>{
         try {
           setLoader(true)
-           const response = await getEventsRevenue(auth?._id)
+           const response = await getEventsRevenue(auth?._id ?? "")
            if(response?.statuscode==200){
               setEventRevenue(response?.data)
               setLoader(false)
@@ -67,7 +67,7 @@ import PaymentHistory from "./paymentshistory"
 
     const getAllpaymentsHistry = async()=>{
          try {
-           const response = await getAllPayments(auth?._id)
+           const response = await getAllPayments(auth?._id ?? "")
            if(response?.statuscode==200){
               setPaymentHistry(response?.data)
            }
@@ -251,4 +251,5 @@ import PaymentHistory from "./paymentshistory"
 
 
 export default RevenueDashboard
+
 

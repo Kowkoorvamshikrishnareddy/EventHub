@@ -63,7 +63,7 @@ export default function AdminDashboard() {
 
 
   useEffect(() => {
-    dispatch(getAllEventsThunk());
+    dispatch(getAllEventsThunk(undefined));
     dispatch(getAllUsersThunk())
   }, [dispatch, auth]);
 
@@ -290,3 +290,4 @@ function StatsCard({ title, value, icon: Icon, description, change, isLoading, c
     </motion.div>
   )
 }
+

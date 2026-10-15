@@ -13,6 +13,7 @@ import { Card, CardTitle, CardDescription, CardContent } from "../ui/card"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Loader2 } from "lucide-react"
+import type { Event } from "@/lib/types"
 
 export default function EventsList({
   allevents,
@@ -22,8 +23,8 @@ export default function EventsList({
 }: {
   allevents: any
   loading: boolean,
-  setFavariteId:any,
-  setPendingEvent:any
+  setFavariteId:(event: Event)=>void,
+  setPendingEvent:(event: Event)=>void
 }) {
   const { auth } = useAuth()
   const dispatch = useAppDispatch()
@@ -38,7 +39,7 @@ export default function EventsList({
 
   const handleRefresh = async () => {
     setIsRefreshing(true)
-    await dispatch(getAllEventsThunk())
+    await dispatch(getAllEventsThunk(undefined))
     setTimeout(() => setIsRefreshing(false), 500) 
   }
 
@@ -181,4 +182,5 @@ export default function EventsList({
     </div>
   )
 }
+
 

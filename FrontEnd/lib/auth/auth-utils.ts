@@ -3,7 +3,7 @@ import type { User } from "@/lib/types"
 
 // This is a server-side function to get the session
 export async function getServerSession() {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   const sessionCookie = cookieStore.get("session")
 
   if (!sessionCookie) {

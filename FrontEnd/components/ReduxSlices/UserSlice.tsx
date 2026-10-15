@@ -79,9 +79,9 @@ export const getAllUsersThunk = createAsyncThunk(
 )
 
 const InitialsState = {
-      users:[],
-      allUsers:[],
-      allOrganizer:[],
+      users: [] as any,
+      allUsers: [] as any[],
+      allOrganizer: [] as any[],
       loading:false,
       error:"",
       formdata:{
@@ -130,7 +130,7 @@ const UserSlice = createSlice({
         }),
         builder.addCase(registerUserThunk.rejected,(state,action)=>{
             state.loading = false
-            state.error = action.error.message
+            state.error = action.error.message ?? "Request failed"
         })
 
 
@@ -146,7 +146,7 @@ const UserSlice = createSlice({
         }),
         builder.addCase(loginUserThunk.rejected,(state,action)=>{
             state.loading = false
-            state.error = action.error.message
+            state.error = action.error.message ?? "Request failed"
         })
 
 
@@ -162,7 +162,7 @@ const UserSlice = createSlice({
         }),
         builder.addCase(logoutUserThunk.rejected,(state,action)=>{
             state.loading = false
-            state.error = action.error.message
+            state.error = action.error.message ?? "Request failed"
         })
 
         // =================get All Organizer ==============
@@ -176,7 +176,7 @@ const UserSlice = createSlice({
         }),
         builder.addCase(getAllOrganizerThunk.rejected,(state,action)=>{
             state.loading = false
-            state.error = action.error.message
+            state.error = action.error.message ?? "Request failed"
         })
 
 
@@ -191,7 +191,7 @@ const UserSlice = createSlice({
         }),
         builder.addCase(getAllUsersThunk.rejected,(state,action)=>{
             state.loading = false
-            state.error = action.error.message
+            state.error = action.error.message ?? "Request failed"
         })
     }
 })
@@ -199,3 +199,4 @@ const UserSlice = createSlice({
 
 export const {setFormData,resetFormData,setloginformdata,resetloginformdata} = UserSlice.actions
 export default UserSlice.reducer
+

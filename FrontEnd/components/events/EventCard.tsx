@@ -15,22 +15,12 @@ import type { Event } from "@/lib/types"
 
 
 interface EventCardProps {
-  Event_title: string
-  Description: string
-  Date: string
-  Time: string
-  location: string
-  Category: string
-  Price: number
-  Organizer: string
-  _id: string
-  event: {}
+  event: Event
   onDelete?: (id: string) => void
   onToggleFavorite?: (event: Event) => void
   isFavorite?: boolean
-  image: string,
-  setFavariteId:()=>void,
-  setPendingEvent:()=>void
+  setFavariteId?: (event: Event) => void
+  setPendingEvent?: (event: Event) => void
 }
 
 export default function EventCard({ event, onDelete,setFavariteId,setPendingEvent, onToggleFavorite, isFavorite = false }: EventCardProps) {
@@ -66,7 +56,7 @@ export default function EventCard({ event, onDelete,setFavariteId,setPendingEven
           <div className="relative h-48 w-full overflow-hidden">
             <Image
               src={event?.image || "/placeholder.svg"}
-              alt={event?.Event_title}
+              alt={event?.Event_title ?? event?.title ?? "Event"}
               fill
               className="object-cover transition-transform duration-300 hover:scale-105"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -74,13 +64,10 @@ export default function EventCard({ event, onDelete,setFavariteId,setPendingEven
           </div>
         </Link>
         <div className="absolute top-4 left-4">
-          <Badge
-          >
-            {
-              event?.Category?.Category_name &&
-              event.Category.Category_name.charAt(0).toUpperCase() +
-              event.Category.Category_name.slice(1)
-            }
+          <Badge>
+            {typeof event.Category === "object" && event.Category?.Category_name
+              ? event.Category.Category_name.charAt(0).toUpperCase() + event.Category.Category_name.slice(1)
+              : typeof event.Category === "string" ? event.Category : event.Category_name}
           </Badge>
         </div>
         {
@@ -88,10 +75,10 @@ export default function EventCard({ event, onDelete,setFavariteId,setPendingEven
           variant="ghost"
           size="icon"
           className="absolute top-3 right-3 bg-white/80 backdrop-blur-sm hover:bg-white rounded-full h-8 w-8 p-1.5"
-          onClick={()=>{setFavariteId(event),setPendingEvent(event)}}
+          onClick={()=>{setFavariteId?.(event); setPendingEvent?.(event)}}
         >
           <Heart
-            className={`h-full w-full transition-colors ${auth?.favorate_events?.some((favid:string) => favid?._id === event._id) ? "fill-red-500 text-red-500" : "text-gray-600"}`}
+            className={`h-full w-full transition-colors ${auth?.favorate_events?.some((favorite) => favorite._id === event._id) ? "fill-red-500 text-red-500" : "text-gray-600"}`}
           />
         </Button>)
         }
@@ -104,7 +91,7 @@ export default function EventCard({ event, onDelete,setFavariteId,setPendingEven
         <div className="space-y-2 text-sm">
           <div className="flex items-center text-gray-700">
             <Calendar className="h-4 w-4 mr-2 text-primary" />
-            <span>{formatDate(event?.Date)}</span>
+            <span>{formatDate(String(event?.Date ?? event.date))}</span>
           </div>
           <div className="flex items-center text-gray-700">
             <MapPin className="h-4 w-4 mr-2 text-primary" />
@@ -112,7 +99,7 @@ export default function EventCard({ event, onDelete,setFavariteId,setPendingEven
           </div>
           <div className="flex items-center text-gray-700">
             <DollarSign className="h-4 w-4 mr-2 text-primary" />
-            <span>{event?.Price}</span>
+            <span>{event?.Price ?? event.price}</span>
           </div>
           <div className="flex items-center text-gray-700">
             <Users className="h-4 w-4 mr-2 text-primary" />
@@ -121,7 +108,7 @@ export default function EventCard({ event, onDelete,setFavariteId,setPendingEven
         </div>
         <div className="mt-5 flex items-center justify-between">
           <div className="text-sm text-gray-600">
-             <span className="font-medium">{event?.Organizer?.name}</span>
+             <span className="font-medium">{typeof event.Organizer === "object" ? event.Organizer?.name : event.organizer}</span>
           </div>
         </div>
       </div>

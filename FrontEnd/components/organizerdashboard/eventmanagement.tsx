@@ -1,6 +1,6 @@
  
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, type Dispatch, type SetStateAction } from "react"
 import {
   AlertTriangle,
   Calendar,
@@ -40,6 +40,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Tabs, TabsContent } from "@/components/ui/tabs"
 import { useToast } from "../ui/use-toast"
 import { getAllOrganizerAndAttendee } from "../ApiServices/ApiServices"
+import type { Event } from "@/lib/types"
 
 /* --------------------------------- UTILS ---------------------------------- */
 const formatCurrency = (amt: number) =>
@@ -71,14 +72,14 @@ function EventManagement() {
   const [status, setStatus] = useState("all")
   const [view, setView] = useState<"grid" | "table">("grid")
   const [isloading, setIsLoading] = useState(false)
-  const [deleteUser, setDeleteUser] = useState(null)
+  const [deleteUser, setDeleteUser] = useState<Event | null>(null)
   const [page, setPage] = useState(1)
 
   const dispatch = useAppDispatch()
   const { auth } = useAuth()
   const { toast } = useToast()
   const { allevents, loading } = useAppSelector((state) => state.createEvents)
-  const [user, setUsers] = useState([])
+  const [user, setUsers] = useState<any[]>([])
   const router = useRouter()
 
   // Page size based on view
@@ -96,7 +97,8 @@ function EventManagement() {
     if (!eventId) return
     try {
       setIsLoading(true)
-      const response = await deleteEvent(auth?._id, eventId)
+      if (!auth?._id) return
+      const response = await deleteEvent(auth._id, eventId)
       console.log("response", response)
       if (response?.statuscode == 200) {
         toast({
@@ -104,7 +106,7 @@ function EventManagement() {
           description: response?.message || "Event deleted successfully",
         })
         setIsLoading(false)
-        dispatch(getAllEventsThunk())
+        dispatch(getAllEventsThunk(undefined))
         setDeleteUser(null)
       } else {
         setIsLoading(false)
@@ -131,8 +133,9 @@ function EventManagement() {
       const mSearch =
         e.Event_title.toLowerCase().includes(search.toLowerCase()) ||
         e.location.toLowerCase().includes(search.toLowerCase()) ||
-        e.Category?.Category_name.toLowerCase().includes(search.toLowerCase())
-      const mCat = cat === "all" || e.Category?.Category_name === cat
+        (typeof e.Category === "object" ? e.Category?.Category_name : e.Category)?.toLowerCase().includes(search.toLowerCase())
+      const categoryName = typeof e.Category === "object" ? e.Category?.Category_name : e.Category
+      const mCat = cat === "all" || categoryName === cat
       const mStatus = status === "all" || e.eventstatus === status
       return mSearch && mCat && mStatus
     }) || []
@@ -151,6 +154,7 @@ function EventManagement() {
   }
 
   const fetchUsers = async () => {
+    if (!auth?._id) return
     const response = await getAllOrganizerAndAttendee(auth._id)
     if (response?.statuscode == 200) {
       setUsers(response?.data?.Users)
@@ -162,7 +166,7 @@ function EventManagement() {
   }, [auth])
 
   // Get unique categories from API data
-  const categories = [...new Set(allevents?.map((e) => e.Category?.Category_name).filter(Boolean))] || []
+  const categories = [...new Set(allevents?.map((e) => typeof e.Category === "object" ? e.Category?.Category_name : e.Category).filter(Boolean))]
 
   /* ------------------------------- RENDER -------------------------------- */
   return (
@@ -505,7 +509,7 @@ function EventManagement() {
                 Cancel
               </Button>
               <Button
-                onClick={() => deleteUser && handleDeleteEvenet(deleteUser?._id)}
+                onClick={() => deleteUser && handleDeleteEvenet(deleteUser?._id ?? deleteUser.id)}
                 className="bg-red-600 hover:bg-red-700"
               >
                 {isloading ? (
@@ -528,7 +532,7 @@ function EventManagement() {
 /* ----------------------------- Pager helper ------------------------------ */
 type PagerProps = {
   page: number
-  setPage: (n: number) => void
+  setPage: Dispatch<SetStateAction<number>>
   total: number
   totalItems: number
   pageSize: number
@@ -624,3 +628,4 @@ function Pager({ page, setPage, total, totalItems, pageSize }: PagerProps) {
 }
 
 export default EventManagement
+

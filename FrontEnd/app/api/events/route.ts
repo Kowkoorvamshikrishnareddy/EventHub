@@ -56,7 +56,7 @@ export async function GET(request: Request) {
       })
     } else if (filter === "popular") {
       // Sort by attendees count (descending)
-      filteredEvents.sort((a, b) => b.attendees - a.attendees)
+      filteredEvents.sort((a, b) => (b.attendees ?? 0) - (a.attendees ?? 0))
       // Take top 10
       filteredEvents = filteredEvents.slice(0, 10)
     }

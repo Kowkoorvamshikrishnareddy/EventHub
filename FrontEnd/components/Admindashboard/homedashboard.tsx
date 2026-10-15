@@ -105,7 +105,7 @@ function AdminDashboardHome() {
 
 
 
-    if (auth?._id ?? "") {
+    if (auth?._id) {
       setLoading(true)
       Promise.all([
         getBestPerformenceEvent(),
@@ -117,6 +117,8 @@ function AdminDashboardHome() {
       ]).finally(() => {
         setLoading(false)
       })
+    } else {
+      setLoading(false)
     }
   }, [auth])
 

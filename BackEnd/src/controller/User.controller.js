@@ -497,15 +497,25 @@ export const EditUserProfile = asynchandler(async (req, res) => {
 
 
 export const refreshAccessToken = asynchandler(async (req, res) => {
-  const token = req.cookies.refreshToken;
+  let token = req.cookies?.refreshToken;
+  if (!token && req.headers.authorization && req.headers.authorization.startsWith("Bearer ")) {
+    token = req.headers.authorization.split(" ")[1];
+  }
 
   if (!token) {
     throw new ApiError(401, "Unauthorized: No refresh token found");
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
-    const user = await User.findById(decoded.id);
+    let decoded = null;
+    try {
+      decoded = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+    } catch {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    }
+
+    const userId = decoded?.id || decoded?.userId || decoded?._id;
+    const user = await User.findById(userId);
 
     if (!user) {
       throw new ApiError(404, "User not found");
@@ -551,6 +561,14 @@ export const verifyOtp = asynchandler(async (req, res) => {
       httpOnly: true,
       secure: true,
       sameSite: "none",
+      path: "/",
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+    res.cookie("accessToken", acessToken, {
+      httpOnly: false,
+      secure: true,
+      sameSite: "none",
+      path: "/",
       maxAge: 24 * 60 * 60 * 1000,
     });
   res.cookie("role", user.role, {

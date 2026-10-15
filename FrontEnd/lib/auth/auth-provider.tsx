@@ -34,26 +34,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const refreshUser = useCallback(async () => {
     try {
-      setIsLoading(true)
-      const response = await axios.get(localpath,{withCredentials: true})
-       console.log("response",response)
-      if (response?.data?.statuscode==201) {
-        setAuth(response?.data?.data) 
+      setIsLoading(true);
+      const token = typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
+      const headers: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};
+      const response = await axios.get(localpath, { withCredentials: true, headers });
+      if (response?.data?.statuscode == 201 || response?.data?.statuscode == 200) {
+        const userData = response?.data?.data;
+        setAuth(userData);
+        if (userData?.role && typeof document !== "undefined") {
+          document.cookie = `role=${userData.role}; path=/; max-age=86400; SameSite=Lax`;
+        }
+        if (userData?.membershipType && typeof document !== "undefined") {
+          document.cookie = `membershipType=${userData.membershipType}; path=/; max-age=86400; SameSite=Lax`;
+        }
       } else {
-        setAuth(null)
+        setAuth(null);
       }
     } catch (error: unknown) {
-       console.log("error123",error)
-       if (axios.isAxiosError(error) && (error.response?.status === 401 || error.response?.status === 403)) {
-        setAuth(null);
-      } else {
-        console.error("Unexpected error in refreshUser:", error);
-      }
-      setAuth(null)
+      console.warn("refreshUser error:", error);
+      setAuth(null);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }, [])
+  }, [localpath]);
 
   useEffect(() => {
     const authUser =

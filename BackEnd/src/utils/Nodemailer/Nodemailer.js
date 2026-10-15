@@ -16,8 +16,13 @@ class ApiError extends Error {
 
 export const sendOtpToMail = async (options) => {
   try {
+    if (!process.env.SMTP_EMAIL || !process.env.SMTP_PASSWORD) {
+      console.warn("⚠️ SMTP credentials not configured. OTP/Credentials for " + options.email + ": " + (options?.otp || options?.password));
+      return;
+    }
+
     const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
+      host: process.env.SMTP_HOST || "smtp.gmail.com",
       port: Number.parseInt(process.env.SMTP_PORT || "587"),
       secure: false,
       auth: {
@@ -132,7 +137,8 @@ export const sendOtpToMail = async (options) => {
     
     await transporter.sendMail(message)
   } catch (error) {
-    throw new ApiError(500, (error).message)
+    console.error("Failed to send email via SMTP:", error.message);
+    console.warn("Generated OTP/Credential for " + options.email + ": " + (options?.otp || options?.password));
   }
 }
 

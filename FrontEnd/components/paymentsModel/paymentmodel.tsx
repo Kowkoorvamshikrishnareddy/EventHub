@@ -413,7 +413,7 @@ const PaymentModal = ({ eventdata, setPaymentData, handleRegisterEvent }: Paymen
                     {isCreatingOrder && "Creating order..."}
                     {isVerifyingPayment && "Verifying payment and registering..."}
                   </p>
-                  <p className="text-sm text-blue-700">Please don't close this window</p>
+                  <p className="text-sm text-blue-700">Please don&apos;t close this window</p>
                 </div>
               </div>
             </div>

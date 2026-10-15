@@ -132,7 +132,7 @@ export function EventStatusModal({ isOpen, onClose, event, onStatusUpdate }: Eve
             <div>
               <DialogTitle className="text-2xl font-bold text-gray-900">Update Event Status</DialogTitle>
               <DialogDescription className="text-gray-600 text-base">
-                Update the status of <span className="font-semibold text-indigo-600">"{event.Event_title}"</span>
+                Update the status of <span className="font-semibold text-indigo-600">&quot;{event.Event_title}&quot;</span>
               </DialogDescription>
             </div>
           </div>

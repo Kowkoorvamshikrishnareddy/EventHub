@@ -3074,7 +3074,7 @@ function UserManagement() {
         {/* Deactivate/Activate Confirmation Dialog */}
         <Dialog open={!!deactivateConfirmUser} onOpenChange={() => setDeactivateConfirmUser(null)}>
           <DialogContent className="w-full max-w-md mx-4">
-            <DialogTitle>""</DialogTitle>
+            <DialogTitle>&quot;&quot;</DialogTitle>
             <div className="flex flex-col items-center justify-center space-y-4 py-4">
               <div
                 className={`w-16 h-16 rounded-full flex items-center justify-center ${

@@ -105,7 +105,7 @@ export default function EventDetail() {
     return (
       <div className="container mx-auto px-4 text-center py-16">
         <h2 className="text-2xl font-semibold mb-4">Event not found</h2>
-        <p className="text-gray-600 mb-8">The event you're looking for doesn't exist or has been removed.</p>
+        <p className="text-gray-600 mb-8">The event you&apos;re looking for doesn&apos;t exist or has been removed.</p>
         <Button asChild>
           <Link href="/events">Back to Events</Link>
         </Button>

@@ -14,6 +14,7 @@ import { AddTofaverate } from "../ApiServices/ApiServices"
 import { useAppDispatch } from "@/lib/store"
  
 import { Loader2 } from "lucide-react"
+import Link from "next/link"
 
 export default function FavoritesList() {
   const [favorites, setFavorites] = useState<Event[]>([])
@@ -186,7 +187,7 @@ export default function FavoritesList() {
             Start adding events to your favorites by clicking the heart icon on any event card.
           </p>
           <Button asChild>
-            <a href="/events">Browse Events</a>
+            <Link href="/events">Browse Events</Link>
           </Button>
         </div>
       )}

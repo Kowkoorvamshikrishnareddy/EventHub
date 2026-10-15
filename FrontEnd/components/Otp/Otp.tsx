@@ -123,7 +123,7 @@ const OtpModel = ({ openotpModel, HandleCloseOtpModel }: { openotpModel: boolean
                     </div>
                     <DialogTitle className="text-xl font-bold font-poppins">Verify Your Identity</DialogTitle>
                     <DialogDescription className="text-gray-600 font-inter">
-                        We've sent a 6-digit verification code to
+                        We&apos;ve sent a 6-digit verification code to
                         <br />
                         <span className="font-medium text-gray-900">{email}</span>
                     </DialogDescription>
@@ -175,7 +175,7 @@ const OtpModel = ({ openotpModel, HandleCloseOtpModel }: { openotpModel: boolean
 
                     <div className="text-center">
                         <p className="text-sm text-gray-600 font-inter">
-                            Didn't receive the code?{" "}
+                            Didn&apos;t receive the code?{" "}
                             <button
                                 type="button"
                                 className="text-blue-600 hover:text-blue-500 font-medium"

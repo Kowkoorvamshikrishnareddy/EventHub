@@ -68,7 +68,7 @@ export default function TestimonialSection() {
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">What Our Clients Say</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Don't just take our word for it. Here's what our clients have to say about their experience with us.
+              Don&apos;t just take our word for it. Here&apos;s what our clients have to say about their experience with us.
             </p>
           </div>
           <div className="max-w-4xl mx-auto bg-gray-200 h-64 rounded-lg animate-pulse"></div>
@@ -98,7 +98,7 @@ export default function TestimonialSection() {
           </span>
           <h2 className="text-3xl md:text-5xl font-bold mb-4">What Our Clients Say</h2>
           <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-            Don't just take our word for it. Here's what our clients have to say about their experience with us.
+            Don&apos;t just take our word for it. Here&apos;s what our clients have to say about their experience with us.
           </p>
         </motion.div>
 
@@ -136,7 +136,7 @@ export default function TestimonialSection() {
                   <div className="flex-1 text-center md:text-left">
                     <div className="mb-6 relative">
                       <p className="text-xl md:text-2xl italic text-gray-700 leading-relaxed">
-                        "{currentTestimonial.content}"
+                        &quot;{currentTestimonial.content}&quot;
                       </p>
                     </div>
                     <h4 className="text-xl font-bold text-gray-900">{currentTestimonial.name}</h4>

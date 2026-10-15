@@ -118,7 +118,7 @@ export default function ForgetPasswordModal({ openforgetPasswordModal, HandleClo
         open={openforgetPasswordModal}
         onOpenChange={HandleCloseForgetPasswordModel}
       >
-        <DialogTitle>""</DialogTitle>
+        <DialogTitle>&quot;&quot;</DialogTitle>
         <DialogContent className="sm:max-w-md p-0 gap-0">
           <Card className="border-0 shadow-none relative">
             <CardHeader className="pb-4">

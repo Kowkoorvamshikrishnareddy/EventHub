@@ -154,7 +154,7 @@ export default function OrganizerDashboard() {
         <Card>
           <CardHeader>
             <CardTitle>My Events</CardTitle>
-            <CardDescription>Manage events you've created</CardDescription>
+            <CardDescription>Manage events you&apos;ve created</CardDescription>
           </CardHeader>
           <CardContent>
             <OrganizerEventsTable />

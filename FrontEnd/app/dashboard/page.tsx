@@ -62,6 +62,10 @@ function AdminDashboard() {
 
   const { auth } = useAuth()
 
+  useEffect(() => {
+    getAllEnquiry()
+  }, [auth])
+
   if (auth?.status == "inActive") {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -86,10 +90,6 @@ function AdminDashboard() {
       </div>
     )
   }
-
-  useEffect(() => {
-    getAllEnquiry()
-  }, [auth])
 
   const renderContent = () => {
     switch (activeTab) {

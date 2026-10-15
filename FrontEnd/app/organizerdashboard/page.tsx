@@ -339,7 +339,7 @@ export default function OrganizerDashboard() {
               </div>
               <h2 className="text-3xl font-bold text-gray-900 mb-3">Account Temporarily Unavailable</h2>
               <p className="text-gray-600 max-w-md text-lg leading-relaxed">
-                Your account access has been temporarily suspended. Don't worry - we're here to help you get back on
+                Your account access has been temporarily suspended. Don&apos;t worry - we&apos;re here to help you get back on
                 track!
               </p>
             </div>
@@ -496,7 +496,7 @@ export default function OrganizerDashboard() {
                     </div>
                     <h3 className="text-2xl font-bold text-gray-900 mb-3">No Events Yet</h3>
                     <p className="text-gray-600 text-center max-w-md text-lg leading-relaxed mb-6">
-                      You don't have any events assigned yet. Once your administrator assigns events, they'll appear
+                      You don&apos;t have any events assigned yet. Once your administrator assigns events, they&apos;ll appear
                       here for you to manage.
                     </p>
 

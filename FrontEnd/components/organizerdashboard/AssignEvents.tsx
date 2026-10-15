@@ -417,7 +417,7 @@ export default function AssignEvents() {
               <p className="text-gray-600 max-w-md text-lg leading-relaxed">
                 {isUserInactive && "Your account access has been temporarily suspended. "}
                 {isOrgInactive && "Your organization subscription needs attention. "}
-                Don't worry - we're here to help you get back on track!
+                Don&apos;t worry - we&apos;re here to help you get back on track!
               </p>
             </div>
             <Alert className="max-w-md border-blue-200 bg-blue-50">
@@ -461,7 +461,7 @@ export default function AssignEvents() {
                     </div>
                     <h3 className="text-2xl font-bold text-gray-900 mb-3">No Events Yet</h3>
                     <p className="text-gray-600 text-center max-w-md text-lg leading-relaxed mb-6">
-                      You don't have any events assigned yet. Once your administrator assigns events, they'll appear
+                      You don&apos;t have any events assigned yet. Once your administrator assigns events, they&apos;ll appear
                       here for you to manage.
                     </p>
                     

@@ -51,8 +51,9 @@ const sidebarItems = [
 function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard")
   const {auth} = useAuth()
-
-
+  useEffect(()=>{
+    getAllEnquiry()
+  },[auth])
 
   if(auth?.status=="inActive"){
       return (
@@ -78,10 +79,6 @@ function AdminDashboard() {
     </div>
   )
 }
-
-  useEffect(()=>{
-    getAllEnquiry()
-  },[auth])
 
   const renderContent = () => {
     switch (activeTab) {

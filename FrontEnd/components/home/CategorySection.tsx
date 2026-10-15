@@ -36,7 +36,7 @@ export default function CategorySection({evetsdata, isLoading}:{evetsdata:Event[
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Browse by Category</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Explore events by category to find exactly what you're looking for, from concerts and conferences to
+            Explore events by category to find exactly what you&apos;re looking for, from concerts and conferences to
             weddings and parties.
           </p>
         </motion.div>

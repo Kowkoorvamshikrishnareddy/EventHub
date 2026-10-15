@@ -415,7 +415,7 @@ const AdminPaymentSheet = ({ formdata, handleCreateAdmin, isSheetOpen, setIsShee
                     {isCreatingOrder && "Creating order..."}
                     {isVerifyingPayment && "Verifying payment and creating admin account..."}
                   </p>
-                  <p className="text-sm text-blue-700">Please don't close this window</p>
+                  <p className="text-sm text-blue-700">Please don&apos;t close this window</p>
                 </div>
               </div>
             </div>

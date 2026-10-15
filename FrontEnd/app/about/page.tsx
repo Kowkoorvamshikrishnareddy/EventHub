@@ -212,8 +212,8 @@ export default function AboutUs() {
       {/* Contact Section */}
       <section className="py-16 px-4 bg-gradient-to-r from-blue-600 to-purple-600">
         <div className="max-w-4xl mx-auto text-center text-white">
-          <h2 className="text-3xl font-bold mb-4">Let's Work Together</h2>
-          <p className="text-xl mb-8 opacity-90">Ready to bring your ideas to life? Let's discuss your next project!</p>
+          <h2 className="text-3xl font-bold mb-4">Let&apos;s Work Together</h2>
+          <p className="text-xl mb-8 opacity-90">Ready to bring your ideas to life? Let&apos;s discuss your next project!</p>
 
           <div className="flex flex-wrap justify-center gap-6 mb-8">
             <div className="flex items-center gap-2">

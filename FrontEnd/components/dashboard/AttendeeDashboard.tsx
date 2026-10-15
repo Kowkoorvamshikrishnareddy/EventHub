@@ -250,7 +250,7 @@ export default function AttendeeDashboard() {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold gradient-text">Welcome back, {auth?.name}! 👋</h1>
-          <p className="text-muted-foreground">Here's what's happening with your events</p>
+          <p className="text-muted-foreground">Here&apos;s what&apos;s happening with your events</p>
         </div>
         <Button asChild className="rounded-full">
           <Link href="/events">

@@ -739,7 +739,7 @@ export default function HeroSection() {
 
                 {/* Description text */}
                 <motion.p variants={elementVariants} className="text-lg md:text-xl text-gray-300">
-                  Your one-stop solution for seamless event management. From planning to execution, we've got you
+                  Your one-stop solution for seamless event management. From planning to execution, we&apos;ve got you
                   covered.
                 </motion.p>
 

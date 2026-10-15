@@ -97,7 +97,7 @@ export default function MonthlyRevenueDashboard({ monthlyRevenue }: MonthlyReven
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">No Revenue Data Available</h3>
               <p className="text-gray-500 text-center max-w-md">
-                There's no monthly revenue data to display at the moment. Revenue data will appear here once
+                There&apos;s no monthly revenue data to display at the moment. Revenue data will appear here once
                 transactions are processed.
               </p>
             </CardContent>

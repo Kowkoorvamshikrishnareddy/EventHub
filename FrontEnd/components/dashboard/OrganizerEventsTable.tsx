@@ -114,7 +114,7 @@ export default function OrganizerEventsTable() {
       ) : events.length === 0 ? (
         <div className="text-center py-8">
           <h3 className="text-lg font-medium">No events found</h3>
-          <p className="text-muted-foreground mb-4">You haven't created any events yet.</p>
+          <p className="text-muted-foreground mb-4">You haven&apos;t created any events yet.</p>
           <Button asChild>
             <Link href="/events/create">Create your first event</Link>
           </Button>

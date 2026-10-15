@@ -6,6 +6,7 @@ import EventCard from "@/components/events/EventCard"
 import { Button } from "@/components/ui/button"
 import type { Event } from "@/lib/types"
 import { fetchEvents } from "@/lib/api"
+import Link from "next/link"
 
 interface CategoryEventsProps {
   slug: string
@@ -123,7 +124,7 @@ export default function CategoryEvents({ slug }: CategoryEventsProps) {
             There are no {slug} events available at the moment. Check back later or explore other categories.
           </p>
           <Button asChild>
-            <a href="/events">Browse All Events</a>
+            <Link href="/events">Browse All Events</Link>
           </Button>
         </div>
       )}

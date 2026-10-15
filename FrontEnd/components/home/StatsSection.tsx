@@ -103,7 +103,7 @@ export default function StatsSection() {
           </span>
           <h2 className="text-3xl md:text-5xl font-bold mb-4 text-white">Making Events Memorable</h2>
           <p className="text-gray-300 max-w-2xl mx-auto text-lg">
-            We've helped thousands of people create unforgettable experiences. Here's a snapshot of our journey so far.
+            We&apos;ve helped thousands of people create unforgettable experiences. Here&apos;s a snapshot of our journey so far.
           </p>
         </motion.div>
 

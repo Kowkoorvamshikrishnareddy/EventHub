@@ -96,7 +96,7 @@ export function ProfileUpdateModal({ isOpen, onClose, userData, onUpdate }: Prof
         <DialogHeader>
           <DialogTitle>Update Profile</DialogTitle>
           <DialogDescription>
-            Make changes to your profile information here. Click save when you're done.
+            Make changes to your profile information here. Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">

@@ -95,7 +95,7 @@ export default function AttendeeBookingsTable() {
       ) : !auth?.registered_attendees?.length ? (
         <div className="text-center py-8">
           <h3 className="text-lg font-medium">No bookings found</h3>
-          <p className="text-muted-foreground mb-4">You haven't registered for any events yet.</p>
+          <p className="text-muted-foreground mb-4">You haven&apos;t registered for any events yet.</p>
           <Button asChild>
             <Link href="/events">Browse events</Link>
           </Button>

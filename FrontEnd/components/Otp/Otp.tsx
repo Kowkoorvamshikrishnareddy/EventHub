@@ -28,7 +28,10 @@ const OtpModel = ({ openotpModel, HandleCloseOtpModel }: { openotpModel: boolean
         if (verifyUser?.email) {
             setEmail(verifyUser?.email)
         }
-    }, [verifyUser])
+        if (verifyUser?.otp) {
+            setOtp(verifyUser.otp)
+        }
+    }, [verifyUser?.email, verifyUser?.otp])
 
 
     const handleVerifyOtp = async (e: React.FormEvent) => {
@@ -126,6 +129,18 @@ const OtpModel = ({ openotpModel, HandleCloseOtpModel }: { openotpModel: boolean
                         We&apos;ve sent a 6-digit verification code to
                         <br />
                         <span className="font-medium text-gray-900">{email}</span>
+                        {verifyUser?.otp && (
+                            <div className="mt-3 p-2 bg-blue-50 border border-blue-200 rounded-md text-xs text-blue-800 text-center">
+                                Your Verification Code: <span className="font-bold text-sm tracking-wider font-mono">{verifyUser.otp}</span>
+                                <button
+                                    type="button"
+                                    onClick={() => setOtp(verifyUser.otp)}
+                                    className="ml-2 underline font-semibold text-blue-900 hover:text-blue-700 cursor-pointer"
+                                >
+                                    (Auto-fill)
+                                </button>
+                            </div>
+                        )}
                     </DialogDescription>
                 </DialogHeader>
 

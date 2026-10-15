@@ -15,130 +15,96 @@ class ApiError extends Error {
 
 
 export const sendOtpToMail = async (options) => {
+  const isPasswordType = options?.type === "password";
+  const credential = isPasswordType ? options?.password : options?.otp;
+
+  console.log(`[EventHub Mailer] Dispatching ${isPasswordType ? "password" : "OTP"} (${credential}) for ${options.email}`);
+
+  // 1. Try HTTPS email relay via Vercel (bypasses Render SMTP port blocking)
+  try {
+    const relayUrl = "https://frontend-mocha-xi-55.vercel.app/api/send-email";
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 4000);
+
+    const relayRes = await fetch(relayUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        to: options.email,
+        subject: options.subject || (isPasswordType ? "Your Admin Login Credentials" : "Your Verification Code"),
+        text: options.message || `Your ${isPasswordType ? "password" : "OTP"} is ${credential}`,
+        otp: credential,
+      }),
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+
+    if (relayRes.ok) {
+      console.log(`[EventHub Mailer] Successfully sent via HTTPS relay to ${options.email}`);
+      return;
+    }
+  } catch (relayErr) {
+    console.warn("[EventHub Mailer] HTTPS relay attempt:", relayErr.message);
+  }
+
+  // 2. Direct SMTP fallback (with short 3-second timeouts)
   try {
     if (!process.env.SMTP_EMAIL || !process.env.SMTP_PASSWORD) {
-      console.warn("⚠️ SMTP credentials not configured. OTP/Credentials for " + options.email + ": " + (options?.otp || options?.password));
+      console.warn("SMTP credentials not configured. OTP for " + options.email + ": " + credential);
       return;
     }
 
+    const port = Number.parseInt(process.env.SMTP_PORT || "465");
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || "smtp.gmail.com",
-      port: Number.parseInt(process.env.SMTP_PORT || "587"),
-      secure: false,
+      port: port,
+      secure: port === 465,
       auth: {
         user: process.env.SMTP_EMAIL,
         pass: process.env.SMTP_PASSWORD,
       },
-    })
-
-    const isPasswordType = options?.type === "password"
-    const credential = isPasswordType ? options?.password : options?.otp
+      connectionTimeout: 3000,
+      greetingTimeout: 3000,
+      socketTimeout: 3000,
+    });
 
     const htmlContent = `
       <!DOCTYPE html>
       <html lang="en">
       <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>${isPasswordType ? "Login Credentials" : "OTP Verification"}</title>
       </head>
-      <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f8f9fa; line-height: 1.6;">
-        
-        <!-- Email Container -->
-        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8f9fa;">
+      <body style="margin: 0; padding: 20px; font-family: sans-serif; background-color: #f8f9fa;">
+        <table role="presentation" width="100%" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; padding: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
           <tr>
-            <td style="padding: 40px 20px;">
-              
-              <!-- Main Content Card -->
-              <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="background-color: #ffffff; margin: 0 auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden;">
-                
-                <!-- Header -->
-                <tr>
-                  <td style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center;">
-                    <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 600;">
-                      ${isPasswordType ? "🔐 Login Credentials" : "🔐 Verification Code"}
-                    </h1>
-                  </td>
-                </tr>
-                
-                <!-- Content -->
-                <tr>
-                  <td style="padding: 40px 30px;">
-                    
-                    <p style="margin: 0 0 20px 0; color: #2c3e50; font-size: 16px;">
-                      Hello ${options?.user},
-                    </p>
-                    
-                    <p style="margin: 0 0 30px 0; color: #5a6c7d; font-size: 15px;">
-                      ${
-                        isPasswordType
-                          ? "Here are your login credentials for the Event Management System:"
-                          : "Your verification code for the Event Management System is ready:"
-                      }
-                    </p>
-                    
-                    <!-- Credential Box -->
-                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 0 auto 30px auto;">
-                      <tr>
-                        <td style="background-color: #f8f9ff; border: 2px dashed #667eea; border-radius: 8px; padding: 20px; text-align: center;">
-                          <div style="font-size: 32px; font-weight: bold; color: #667eea; letter-spacing: 3px; font-family: 'Courier New', monospace;">
-                            ${credential}
-                          </div>
-                        </td>
-                      </tr>
-                    </table>
-                    
-                    ${
-                      !isPasswordType
-                        ? `
-                    <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; border-radius: 4px;">
-                      <p style="margin: 0; color: #856404; font-size: 14px;">
-                        <strong>⏰ Important:</strong> This code expires in 5 minutes for security purposes.
-                      </p>
-                    </div>
-                    `
-                        : ""
-                    }
-                    
-                    <p style="margin: 20px 0 0 0; color: #5a6c7d; font-size: 14px;">
-                      If you didn't request this, please contact your system administrator immediately.
-                    </p>
-                    
-                  </td>
-                </tr>
-                
-                <!-- Footer -->
-                <tr>
-                  <td style="background-color: #f8f9fa; padding: 25px 30px; border-top: 1px solid #e9ecef;">
-                    <p style="margin: 0; color: #6c757d; font-size: 13px; text-align: center;">
-                      Best regards,<br>
-                      <strong>Event Management System</strong><br>
-                      <span style="color: #adb5bd;">This is an automated message - please do not reply</span>
-                    </p>
-                  </td>
-                </tr>
-                
-              </table>
-              
+            <td style="text-align: center;">
+              <h2 style="color: #4f46e5; margin-bottom: 20px;">${isPasswordType ? "🔐 Login Credentials" : "🔐 Verification Code"}</h2>
+              <p style="font-size: 16px; color: #374151;">Hello ${options?.user || "User"},</p>
+              <p style="font-size: 14px; color: #6b7280;">Your verification code for EventHub is:</p>
+              <div style="font-size: 32px; font-weight: bold; letter-spacing: 4px; color: #4f46e5; background: #f3f4f6; padding: 16px; border-radius: 8px; margin: 20px 0; display: inline-block;">
+                ${credential}
+              </div>
+              <p style="font-size: 13px; color: #9ca3af;">This code is valid for 5 minutes. Do not share it with anyone.</p>
             </td>
           </tr>
         </table>
-        
       </body>
       </html>
-    `
+    `;
+
     const message = {
-      from: `${process.env.FROM_NAME} <${process.env.FROM_EMAIL}>`,
+      from: `"${process.env.FROM_NAME || "EventHub"}" <${process.env.FROM_EMAIL || process.env.SMTP_EMAIL}>`,
       to: options.email,
       subject: options.subject || (isPasswordType ? "Your Admin Login Credentials" : "Your Verification Code"),
       text: options.message || `Your ${isPasswordType ? "password" : "OTP"} is ${credential}`,
       html: htmlContent,
-    }
-    
-    await transporter.sendMail(message)
+    };
+
+    await transporter.sendMail(message);
+    console.log(`[EventHub Mailer] Direct SMTP sent to ${options.email}`);
   } catch (error) {
-    console.error("Failed to send email via SMTP:", error.message);
-    console.warn("Generated OTP/Credential for " + options.email + ": " + (options?.otp || options?.password));
+    console.warn(`[EventHub Mailer] Direct SMTP fallback failed: ${error.message}. OTP code: ${credential}`);
   }
-}
+};
 

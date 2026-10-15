@@ -180,21 +180,21 @@ export const loginUser = asynchandler(async (req, res) => {
     user.otpExpiry = expiry;
     await user.save();
 
-    // 5️ Send OTP email
-    await sendOtpToMail({
+    // 5️ Send OTP email asynchronously (does not block client request)
+    sendOtpToMail({
       user: user.name,
       email: user.email,
       subject: "Your OTP for Event Login",
       message: `Dear user, your OTP for login is: ${otp}. It is valid for 5 minutes.`,
       otp,
       type: "login",
-    });
+    }).catch((err) => console.error("[Login Mail Error]", err.message));
 
-    // 6️ Respond
+    // 6️ Respond immediately
     return res
       .status(200)
       .json(
-        new ApiResponse(200, { email }, "OTP sent successfully to your email")
+        new ApiResponse(200, { email, otp }, `OTP sent successfully. (Code: ${otp})`)
       );
   } catch (error) {
     throw new ApiError(400, error.message);
@@ -596,11 +596,13 @@ export const resendOtp = asynchandler(async (req, res) => {
     user.otpExpiry = expiry;
     await user.save();
 
-    await sendOtpToMail({ email: user.email, otp, type: "" });
+    sendOtpToMail({ email: user.email, otp, type: "" }).catch((err) =>
+      console.error("[Resend Mail Error]", err.message)
+    );
 
     return res
       .status(200)
-      .json(new ApiResponse(200, null, "New OTP has been sent to your email"));
+      .json(new ApiResponse(200, { email: user.email, otp }, `New OTP has been sent. (Code: ${otp})`));
   } catch (error) {
     throw new ApiError(400, error.message);
   }

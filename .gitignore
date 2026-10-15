@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Next.js Build Output
+.next/
+*/.next/
+out/
+
+# Environment Variables
+.env
+.env.*
+.env.local
+!.env.example
+!*/.env.example
+
+# Local uploads
+BackEnd/uploads/*
+!BackEnd/uploads/.gitkeep
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# Vercel & Render
+.vercel/
